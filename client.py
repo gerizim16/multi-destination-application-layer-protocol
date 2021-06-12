@@ -80,6 +80,11 @@ class MDALPClient:
     def __enter__(self):
         return self
 
+    def close(self):
+        self.sel.unregister(self.sock)
+        self.sock.close()
+        logger.info('MDALPClient closed.')
+
     def __exit__(self, type, value, traceback):
         self.close()
 
@@ -133,7 +138,10 @@ class MDALPClient:
         if seq is not None: header += f'SEQ:{seq};'
         header = header.encode()
 
-        payload = b'DATA:' + data if data is not None else b''
+        payload = b''
+        if data is not None:
+            header += b'DATA:'
+            payload = data
 
         message = header + payload
 
@@ -158,15 +166,12 @@ class MDALPClient:
                 continue
 
             data_recv, addr_from = self.sock.recvfrom(1024)
+            if not data_recv: continue
 
             if addr_from != addr:
                 logger.info(
                     f'Data received from {addr_from}, expected address is {addr}.'
                 )
-                continue
-
-            if not data_recv:
-                logger.info(f'Data received from {addr_from} is empty.')
                 continue
 
             data_recv = data_recv.decode()
@@ -177,18 +182,13 @@ class MDALPClient:
                 break
         else:
             # MAX_RETRIES reached
-            raise IOError(
-                f'MAX_RETRIES of {MDALPClient.MAX_RETRIES} reached!\n\
+            logger.warn(f'MAX_RETRIES of {MDALPClient.MAX_RETRIES} reached!\n\
                     addr: {addr}\n\
                     tid: {tid}\n\
                     seq: {seq}')
+            return 0
 
         return ret
-
-    def close(self):
-        self.sel.unregister(self.sock)
-        self.sock.close()
-        logger.info('MDALPClient closed.')
 
     def send_intent(self) -> Dict[str, Any]:
         response = None
@@ -220,16 +220,22 @@ class MDALPClient:
             if response.get('Type') == 1: break
         else:
             # MAX_RETRIES reached
-            raise IOError(f'MAX_RETRIES of {MDALPClient.MAX_RETRIES} reached!')
+            logger.warning(
+                f'MAX_RETRIES of {MDALPClient.MAX_RETRIES} reached!')
             response = None
 
         logger.info(f'Response: {response}')
         return response
 
-    def send(self,
-             data: bytes,
-             load_balance: bool = True,
-             nth_server: int = 1):
+    def _send_single_server(self, host, tid: int, data: bytes) -> int:
+        ret = 0
+        for seq, data_splice in enumerate(
+                self.batch_data(data, MDALPClient.MAX_PAYLOAD)):
+            ret += self._send_type2((host, MDALPClient.PORT), tid, seq,
+                                    data_splice)
+        return ret
+
+    def _send_load_balance(self, hosts, tid: int, data: bytes) -> int:
         @dataclasses.dataclass
         class ServerData:
             host: str
@@ -266,55 +272,44 @@ class MDALPClient:
                 self.seq_curr += 1
                 return self.get_curr_data()
 
-        response = self.send_intent()
-        tid = response['TID']
-        servers = [
-            ServerData(server['ip_address']) for server in response['DATA']
-        ]
+        servers = [ServerData(host) for host in hosts]
+        # get round trip times
+        latencies = MDALPClient.get_latencies(server.host
+                                              for server in servers)
+        for server, latency in zip(servers, latencies):
+            server.latency = latency
 
-        if load_balance:
-            # get round trip times
-            latencies = MDALPClient.get_latencies(server.host
-                                                  for server in servers)
-            for server, latency in zip(servers, latencies):
-                server.latency = latency
+        # sort servers by decreasing latency
+        servers.sort(key=lambda s: s.latency, reverse=True)
 
-            # sort servers by decreasing latency
-            servers.sort(key=lambda s: s.latency, reverse=True)
+        split_data = split_by_ratio(data,
+                                    (server.latency for server in servers))
 
-            split_data = split_by_ratio(data,
-                                        (server.latency for server in servers))
+        for server, sub_data in zip(servers, split_data):
+            server.data_seq = list(
+                MDALPClient.batch_data(sub_data, MDALPClient.MAX_PAYLOAD))
 
-            for server, sub_data in zip(servers, split_data):
-                server.data_seq = list(
-                    MDALPClient.batch_data(sub_data, MDALPClient.MAX_PAYLOAD))
+        acc = 0
+        for server in servers:
+            server.seq_min = acc
+            server.seq_curr = acc
+            acc += len(server.data_seq)
 
-            acc = 0
-            for server in servers:
-                server.seq_min = acc
-                server.seq_curr = acc
-                acc += len(server.data_seq)
-
-            # summary
-            for server in servers:
-                logger.info(server)
-        else:
-            servers[nth_server - 1].data_seq = list(
-                MDALPClient.batch_data(data, MDALPClient.MAX_PAYLOAD))
-            servers[nth_server - 1].seq_min = 0
-            servers[nth_server - 1].seq_curr = 0
+        # summary
+        for server in servers:
+            logger.info(server)
 
         ret = 0
         # initial send
         for server in servers:
-            for data_splice in server.data_seq:
-                addr = (server.host, MDALPClient.PORT)
-                self._send_to(addr,
-                              type=2,
-                              tid=tid,
-                              seq=server.seq_curr,
-                              data=data_splice)
-                break
+            data_splice = server.get_curr_data()
+            addr = (server.host, MDALPClient.PORT)
+            self._send_to(addr,
+                          type=2,
+                          tid=tid,
+                          seq=server.seq_curr,
+                          data=data_splice)
+
         # send the rest
         while not all(map(lambda s: s.data_exhausted, servers)):
             # check server timeouts
@@ -330,33 +325,22 @@ class MDALPClient:
                                   data=server.get_curr_data())
 
             events = self.sel.select(MDALPClient.TIMEOUT)
-            if len(events) == 0:
-                # timeout
-                continue
+            if len(events) == 0: continue
 
             data_recv, addr_from = self.sock.recvfrom(1024)
-
-            if not data_recv:
-                # empty data
-                logger.info(f'Data received from {addr_from} is empty.')
-                continue
+            if not data_recv: continue
 
             data_recv = data_recv.decode()
             response = MDALPClient.parse_message(data_recv)
 
-            if not all(
-                (response.get('Type') == 3, response.get('TID') == tid)):
-                # wrong response
+            if not (response.get('Type') == 3 and response.get('TID') == tid):
                 continue
 
             server = next(
                 (s
                  for s in servers if (s.host, MDALPClient.PORT) == addr_from),
                 None)
-
-            if server is None:
-                # concerned server not found
-                continue
+            if server is None: continue
 
             if response.get('SEQ') != server.seq_curr:
                 # not expected acknowledgement sequence number
@@ -366,8 +350,9 @@ class MDALPClient:
                         f'Server {server.host}: Seq number mismatch. Updating seq_curr to {new_seq} from {server.seq_curr}.'
                     )
                     server.seq_curr = new_seq
-                pass
 
+            # server acknowledged as expected
+            ret += len(server.get_curr_data())
             next_data = server.get_next_data()
             if next_data is None:
                 # no more data to send for this server
@@ -379,6 +364,27 @@ class MDALPClient:
                           tid=tid,
                           seq=server.seq_curr,
                           data=next_data)
+
+        return ret
+
+    def send(self,
+             data: bytes,
+             load_balance: bool = True,
+             nth_server: int = 1) -> int:
+        response = self.send_intent()
+        if response is None: return 0
+
+        tid = response['TID']
+        if tid is None: return 0
+
+        hosts = [server['ip_address'] for server in response['DATA']]
+        if len(hosts) == 0: return 0
+
+        ret = 0
+        if load_balance:
+            ret = self._send_load_balance(hosts, tid, data)
+        else:
+            ret = self._send_single_server(hosts[nth_server - 1], tid, data)
 
         logger.info(f'Send completed.')
         return ret
@@ -397,9 +403,10 @@ def main(args):
     with MDALPClient((args.addr, args.port)) as sock:
         data = args.file.read().encode()
         if args.mode == 1:
-            sock.send(data)
+            ret = sock.send(data)
         else:
-            sock.send(data, load_balance=False, nth_server=args.server)
+            ret = sock.send(data, load_balance=False, nth_server=args.server)
+        print(ret, len(data))
 
 
 if __name__ == '__main__':
