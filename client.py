@@ -134,7 +134,7 @@ class MDALPClient:
 
         message = header + payload
 
-        ret = self.sock.sendto(message, addr)
+        ret = max(0, self.sock.sendto(message, addr) - len(header))
         logger.debug(f'client -> {addr} (return {ret}): {message}')
         return ret
 
@@ -146,10 +146,8 @@ class MDALPClient:
                     tid: int = None,
                     seq: int = None,
                     data: bytes = None) -> int:
-        ret = len(data)
-
+        ret = 0
         self.sel.register(self.sock, selectors.EVENT_READ)
-
         for attempt in range(MDALPClient.MAX_RETRIES):
             ret = self._send_to(addr, 2, tid, seq, data)
             events = self.sel.select(MDALPClient.TIMEOUT)
@@ -242,10 +240,18 @@ class MDALPClient:
         class Server:
             host: str
             latency: float = float('inf')
-            data: Sequence[bytes] = dataclasses.field(repr=False,
-                                                      default_factory=list)
+            data_seq: Sequence[bytes] = dataclasses.field(repr=False,
+                                                          default_factory=list)
             seq_start: int = 0
             seq_curr: int = 0
+
+            def get_curr_data(self):
+                idx = self.seq_curr - self.seq_start
+                return self.data_seq[idx] if idx < len(self.data_seq) else None
+
+            def get_next_data(self):
+                self.seq_curr += 1
+                return self.get_curr_data()
 
         response = self.send_intent()
         tid = response['TID']
@@ -265,28 +271,29 @@ class MDALPClient:
                                         (server.latency for server in servers))
 
             for server, sub_data in zip(servers, split_data):
-                server.data = list(
+                server.data_seq = list(
                     MDALPClient.batch_data(sub_data, MDALPClient.MAX_PAYLOAD))
 
             acc = 0
             for server in servers:
                 server.seq_start = acc
                 server.seq_curr = acc
-                acc += len(server.data)
+                acc += len(server.data_seq)
 
             # summary
             for server in servers:
                 logger.info(server)
         else:
-            servers[nth_server - 1].data = list(
+            servers[nth_server - 1].data_seq = list(
                 MDALPClient.batch_data(data, MDALPClient.MAX_PAYLOAD))
             servers[nth_server - 1].seq_start = 0
             servers[nth_server - 1].seq_curr = 0
 
         ret = 0
+
         for server in servers:
             logger.info(f'Sending data to {server.host}.')
-            for data_splice in server.data:
+            for data_splice in server.data_seq:
                 addr = (server.host, MDALPClient.PORT)
                 try:
                     ret += self._send_type2(addr,
@@ -300,6 +307,7 @@ class MDALPClient:
                     server.seq_curr += 1
 
         logger.info(f'Send completed.')
+        return ret
 
 
 def main(args):
