@@ -134,16 +134,19 @@ class MDALPClient:
                  tid: int = None,
                  seq: int = None,
                  data: bytes = None) -> int:
-        message = f'Type:{type};'
-        if tid is not None: message += f'TID:{tid};'
-        if seq is not None: message += f'SEQ:{seq};'
-        message = message.encode()
-        header_len = len(message)
-        if data is not None:
-            message += b'DATA:' + data + b';'
-            header_len -= len(data) + len('DATA:;')
+        header = f'Type:{type};'
+        if tid is not None: header += f'TID:{tid};'
+        if seq is not None: header += f'SEQ:{seq};'
+        header = header.encode()
 
-        ret = max(0, self.sock.sendto(message, addr) - header_len)
+        payload = b''
+        if data is not None:
+            header += b'DATA:'
+            payload = data
+
+        message = header + payload
+
+        ret = max(0, self.sock.sendto(message, addr) - len(payload))
         logger.debug(f'client -> {addr} (return {ret}): {message}')
         return ret
 
