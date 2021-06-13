@@ -37,6 +37,21 @@ def split_by_ratio(seq: Sequence, ratio: Iterable) -> Iterator[Sequence]:
         yield seq[start:end]
 
 
+def get_latencies(hosts: Iterable[str]) -> List:
+    async_pings = [get_average_ping(host) for host in hosts]
+    pings_future = asyncio.gather(*async_pings)
+
+    loop = asyncio.get_event_loop()
+    returns = loop.run_until_complete(pings_future)
+    if not loop.is_running(): loop.close()
+
+    return returns
+
+
+def batch_seq(seq: Sequence, size: int) -> Iterator[Sequence]:
+    return (seq[i:i + size] for i in range(0, len(seq), size))
+
+
 async def get_average_ping(host: str, n: int = 3) -> float:
     number = r'\d+(?:\.\d+)?'
     if platform.system().lower() == 'windows':
@@ -90,6 +105,7 @@ class MDALPClient:
 
     @staticmethod
     def parse_message(message: str) -> Dict[str, Any]:
+        if len(message) > 0 and message[-1] != ';': message += ';'
         fields = [
             ('Type', r'\d+'),
             ('TID', r'\d+'),
@@ -106,26 +122,11 @@ class MDALPClient:
             name = field[0]
             if parsed[name] is not None: parsed[name] = int(parsed[name])
 
-        if parsed.get('Type') == 1 and parsed.get('DATA'):
+        if parsed.get('Type') == 1 and parsed.get('DATA') is not None:
             parsed['DATA'] = eval(parsed['DATA'])
 
         logger.debug(f'Parsed data: {parsed}')
         return parsed
-
-    @staticmethod
-    def get_latencies(hosts: Iterable[str]) -> List:
-        async_pings = [get_average_ping(host) for host in hosts]
-        pings_future = asyncio.gather(*async_pings)
-
-        loop = asyncio.get_event_loop()
-        returns = loop.run_until_complete(pings_future)
-        if not loop.is_running(): loop.close()
-
-        return returns
-
-    @staticmethod
-    def batch_data(data: Sequence, size: int) -> Iterator[Sequence]:
-        return (data[i:i + size] for i in range(0, len(data), size))
 
     def _send_to(self,
                  addr,
@@ -133,19 +134,16 @@ class MDALPClient:
                  tid: int = None,
                  seq: int = None,
                  data: bytes = None) -> int:
-        header = f'Type:{str(type)};'
-        if tid is not None: header += f'TID:{tid};'
-        if seq is not None: header += f'SEQ:{seq};'
-        header = header.encode()
-
-        payload = b''
+        message = f'Type:{type};'
+        if tid is not None: message += f'TID:{tid};'
+        if seq is not None: message += f'SEQ:{seq};'
+        message = message.encode()
+        header_len = len(message)
         if data is not None:
-            header += b'DATA:'
-            payload = data
+            message += b'DATA:' + data + b';'
+            header_len -= len(data) + len('DATA:;')
 
-        message = header + payload
-
-        ret = max(0, self.sock.sendto(message, addr) - len(header))
+        ret = max(0, self.sock.sendto(message, addr) - header_len)
         logger.debug(f'client -> {addr} (return {ret}): {message}')
         return ret
 
@@ -230,7 +228,7 @@ class MDALPClient:
     def _send_single_server(self, host, tid: int, data: bytes) -> int:
         ret = 0
         for seq, data_splice in enumerate(
-                self.batch_data(data, MDALPClient.MAX_PAYLOAD)):
+                batch_seq(data, MDALPClient.MAX_PAYLOAD)):
             ret += self._send_type2((host, MDALPClient.PORT), tid, seq,
                                     data_splice)
         return ret
@@ -274,8 +272,7 @@ class MDALPClient:
 
         servers = [ServerData(host) for host in hosts]
         # get round trip times
-        latencies = MDALPClient.get_latencies(server.host
-                                              for server in servers)
+        latencies = get_latencies(server.host for server in servers)
         for server, latency in zip(servers, latencies):
             server.latency = latency
 
@@ -283,11 +280,11 @@ class MDALPClient:
         servers.sort(key=lambda s: s.latency, reverse=True)
 
         split_data = split_by_ratio(data,
-                                    (server.latency for server in servers))
+                                    (1 / server.latency for server in servers))
 
         for server, sub_data in zip(servers, split_data):
-            server.data_seq = list(
-                MDALPClient.batch_data(sub_data, MDALPClient.MAX_PAYLOAD))
+            server.data_seq = list(batch_seq(sub_data,
+                                             MDALPClient.MAX_PAYLOAD))
 
         acc = 0
         for server in servers:
@@ -302,13 +299,11 @@ class MDALPClient:
         ret = 0
         # initial send
         for server in servers:
-            data_splice = server.get_curr_data()
-            addr = (server.host, MDALPClient.PORT)
-            self._send_to(addr,
+            self._send_to((server.host, MDALPClient.PORT),
                           type=2,
                           tid=tid,
                           seq=server.seq_curr,
-                          data=data_splice)
+                          data=server.get_curr_data())
 
         # send the rest
         while not all(map(lambda s: s.data_exhausted, servers)):
@@ -374,10 +369,10 @@ class MDALPClient:
         response = self.send_intent()
         if response is None: return 0
 
-        tid = response['TID']
+        tid = response.get('TID')
         if tid is None: return 0
 
-        hosts = [server['ip_address'] for server in response['DATA']]
+        hosts = [server.get('ip_address') for server in response.get('DATA')]
         if len(hosts) == 0: return 0
 
         ret = 0
