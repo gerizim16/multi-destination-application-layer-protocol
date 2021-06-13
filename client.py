@@ -16,22 +16,31 @@ logging.basicConfig()
 logger = logging.getLogger(__name__)
 
 
+def argsort(seq: Sequence, *args, **kargs) -> List:
+    return sorted(range(len(seq)), key=seq.__getitem__, *args, **kargs)
+
+
 def normalize_to_sum(iter: Iterable[Union[int, float]]) -> List[float]:
     it1, it2 = itertools.tee(iter)
     total = sum(it1)
     return [float(i) / total for i in it2]
 
 
-def split_by_ratio(seq: Sequence, ratio: Iterable) -> Iterator[Sequence]:
-    ratio = normalize_to_sum(ratio)
+def split_by_ratio(seq: Sequence, ratios: Iterable) -> Iterator[Sequence]:
+    ratio_norm = normalize_to_sum(ratios)
+    ratio_norm_argsort = argsort(ratio_norm)
 
-    length = len(seq)
+    seq_len = len(seq)
+    sub_seq_lens = [0] * len(ratio_norm)
+    remaining = seq_len
+    for idx, ratio in zip(ratio_norm_argsort, sorted(ratio_norm)):
+        sub_len = min(math.ceil(ratio * seq_len), remaining)
+        remaining -= sub_len
+        sub_seq_lens[idx] = sub_len
+
     splits = [0]
-    for p in ratio:
-        sub_length = math.ceil(p * length)
-        splits.append(sub_length + splits[-1])
-
-    splits[-1] = length
+    for sub_len in sub_seq_lens:
+        splits.append(splits[-1] + sub_len)
 
     for start, end in zip(splits, splits[1:]):
         yield seq[start:end]
@@ -278,9 +287,6 @@ class MDALPClient:
         latencies = get_latencies(server.host for server in servers)
         for server, latency in zip(servers, latencies):
             server.latency = latency
-
-        # sort servers by decreasing latency
-        servers.sort(key=lambda s: s.latency, reverse=True)
 
         split_data = split_by_ratio(data,
                                     (1 / server.latency for server in servers))
