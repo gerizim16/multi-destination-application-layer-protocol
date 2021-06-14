@@ -155,7 +155,7 @@ class MDALPClient:
 
         message = header + payload
 
-        ret = max(0, self.sock.sendto(message, addr) - len(payload))
+        ret = max(0, self.sock.sendto(message, addr) - len(header))
         logger.debug(f'client -> {addr} (return {ret}): {message}')
         return ret
 
@@ -406,11 +406,14 @@ def main(args):
 
     with MDALPClient((args.addr, args.port)) as sock:
         data = args.file.read().encode()
+        start = perf_counter()
         if args.mode == 1:
             ret = sock.send(data)
         else:
             ret = sock.send(data, load_balance=False, nth_server=args.server)
-        print(ret, len(data))
+        end = perf_counter()
+        logger.debug(f'return: {ret} | data length: {len(data)}')
+        logger.info(f'Send took {end - start}s, with arguments {args}')
 
 
 if __name__ == '__main__':
