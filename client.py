@@ -26,7 +26,9 @@ def normalize_to_sum(iter: Iterable[Union[int, float]]) -> List[float]:
     return [float(i) / total for i in it2]
 
 
-def split_by_ratio(seq: Sequence, ratios: Iterable) -> Iterator[Sequence]:
+def split_by_ratio(seq: Sequence,
+                   ratios: Iterable,
+                   min_length: int = 0) -> Iterator[Sequence]:
     ratio_norm = normalize_to_sum(ratios)
     ratio_norm_argsort = argsort(ratio_norm)
 
@@ -34,7 +36,7 @@ def split_by_ratio(seq: Sequence, ratios: Iterable) -> Iterator[Sequence]:
     sub_seq_lens = [0] * len(ratio_norm)
     remaining = seq_len
     for idx, ratio in zip(ratio_norm_argsort, sorted(ratio_norm)):
-        sub_len = min(math.ceil(ratio * seq_len), remaining)
+        sub_len = min(max(math.ceil(ratio * seq_len), min_length), remaining)
         remaining -= sub_len
         sub_seq_lens[idx] = sub_len
 
@@ -288,8 +290,9 @@ class MDALPClient:
         for server, latency in zip(servers, latencies):
             server.latency = latency
 
-        split_data = split_by_ratio(data,
-                                    (1 / server.latency for server in servers))
+        split_data = split_by_ratio(
+            data, (1 / server.latency for server in servers),
+            math.ceil(MDALPClient.MIN_RATIO * len(data)))
 
         for server, sub_data in zip(servers, split_data):
             server.data_seq = list(batch_seq(sub_data,
@@ -315,7 +318,7 @@ class MDALPClient:
                           data=server.get_curr_data())
 
         # send the rest
-        while not all(map(lambda s: s.data_exhausted, servers)):
+        while any(map(lambda s: not s.data_exhausted, servers)):
             # check server timeouts
             for server in servers:
                 if server.data_exhausted: continue
