@@ -172,27 +172,27 @@ class MDALP:
             addr: IP address of the server
             sock (socket.socket, optional): Socket to use, creates a new socket object if None. Defaults to None.
         '''
-        self.sock: socket.socket = sock if sock is not None else socket.socket(
+        self._sock: socket.socket = sock if sock is not None else socket.socket(
             socket.AF_INET, socket.SOCK_DGRAM)
-        self.sock.setblocking(False)
-        self.sel = selectors.DefaultSelector()
-        self.sel.register(self.sock, selectors.EVENT_READ)
-        self.addr = addr
+        self._sock.setblocking(False)
+        self._sel = selectors.DefaultSelector()
+        self._sel.register(self._sock, selectors.EVENT_READ)
+        self._addr = addr
 
     def __enter__(self):
         return self
 
     def close(self):
         '''Call when done'''
-        self.sel.unregister(self.sock)
-        self.sock.close()
-        logger.info(f'MDALP: {self.addr} closed.')
+        self._sel.unregister(self._sock)
+        self._sock.close()
+        logger.info(f'MDALP: {self._addr} closed.')
 
     def __exit__(self, type, value, traceback):
         self.close()
 
     @staticmethod
-    def parse_message(message: str) -> Dict[str, Any]:
+    def _parse_message(message: str) -> Dict[str, Any]:
         '''Parses a message into a dictionary
 
         Args:
@@ -252,8 +252,8 @@ class MDALP:
 
         message = header + payload
 
-        ret = max(0, self.sock.sendto(message, self.addr) - len(header))
-        logger.debug(f'client -> {self.addr} (return {ret}): {message}')
+        ret = max(0, self._sock.sendto(message, self._addr) - len(header))
+        logger.debug(f'client -> {self._addr} (return {ret}): {message}')
         return ret
 
     def recv_packet(self,
@@ -268,16 +268,16 @@ class MDALP:
         Returns:
             Dict[str, Any]: Parsed message.
         '''
-        events = self.sel.select(timeout)
+        events = self._sel.select(timeout)
         if len(events) == 0:
             logger.info(f'Receive timeout!')
             return None
 
-        data, addr = self.sock.recvfrom(buf_size)
+        data, addr = self._sock.recvfrom(buf_size)
 
-        if addr != self.addr:
+        if addr != self._addr:
             logger.info(
-                f'Data received from {addr}, expected address is {self.addr}.')
+                f'Data received from {addr}, expected address is {self._addr}.')
             return None
 
         if not data:
@@ -285,7 +285,7 @@ class MDALP:
             return None
 
         data = data.decode()
-        parsed = self.parse_message(data)
+        parsed = self._parse_message(data)
         if parsed is None: logger.warn(f'Parsed failed with data {data}')
         return parsed
 
@@ -301,19 +301,19 @@ class MDALP:
         Returns:
             Tuple[Dict[str, Any], Any]: Parsed message and address
         '''
-        events = self.sel.select(timeout)
+        events = self._sel.select(timeout)
         if len(events) == 0:
             logger.info(f'Receive timeout!')
             return None, None
 
-        data, addr = self.sock.recvfrom(buf_size)
+        data, addr = self._sock.recvfrom(buf_size)
 
         if not data:
             logger.info(f'Data received from {addr} is empty.')
             return None, None
 
         data = data.decode()
-        parsed = self.parse_message(data)
+        parsed = self._parse_message(data)
         if parsed is None: logger.warn(f'Parsed failed with data {data}')
         return parsed, addr
 
@@ -336,7 +336,7 @@ class MDALPRecvClient(MDALP):
             seq_start (int, optional): Starting sequence number. Defaults to 0.
         '''
         super().__init__(addr, sock=sock)
-        self.tid = tid
+        self._tid = tid
         self._last_send = None
         self._seq = tuple(data_seq)
         self._base = seq_start
@@ -397,7 +397,7 @@ class MDALPRecvClient(MDALP):
         '''Sends the current data in iteration'''
         data = self.get_curr_data()
         if data is None: return
-        self.send_packet(type=2, tid=self.tid, seq=self.seq_curr, data=data)
+        self.send_packet(type=2, tid=self._tid, seq=self.seq_curr, data=data)
         self._last_send = perf_counter()
 
     def send_next(self):
@@ -406,7 +406,7 @@ class MDALPRecvClient(MDALP):
         '''
         data = self.get_next_data()
         if data is None: return
-        self.send_packet(type=2, tid=self.tid, seq=self.seq_curr, data=data)
+        self.send_packet(type=2, tid=self._tid, seq=self.seq_curr, data=data)
         self._last_send = perf_counter()
 
 
@@ -417,14 +417,14 @@ class MDALPClient(MDALP):
     TIMEOUT = 3
     MIN_RATIO = 0.1
 
-    def send_intent(self) -> Dict[str, Any]:
+    def _send_intent(self) -> Dict[str, Any]:
         '''Returns the parsed type 1 message after sending the type 0.
 
         Returns:
             Dict[str, Any]: Parsed message
         '''
         self.send_packet(0)
-        logger.info(f'Intent message sent to {self.addr}.')
+        logger.info(f'Intent message sent to {self._addr}.')
         response = None
         while response is None:
             response = self.recv_packet(timeout=5)
@@ -445,7 +445,7 @@ class MDALPClient(MDALP):
             int: Number of data in bytes sent
         '''
         addr = (host, self.RECV_PORT)
-        server = MDALPRecvClient(addr, self.sock.dup(), tid,
+        server = MDALPRecvClient(addr, self._sock.dup(), tid,
                                  batch_seq(data, self.MAX_PAYLOAD))
 
         ret = 0
@@ -492,14 +492,14 @@ class MDALPClient(MDALP):
         for host, d in zip(hosts, split_data):
             addr = (host, self.RECV_PORT)
             recv_servers.append(
-                MDALPRecvClient(addr, self.sock.dup(), tid,
+                MDALPRecvClient(addr, self._sock.dup(), tid,
                                 batch_seq(d, self.MAX_PAYLOAD), seq_base))
             seq_base += recv_servers[-1].data_len
 
         # summary
         for server, latency in zip(recv_servers, latencies):
             logger.info(
-                f'addr: {server.addr}, latency: {latency}, data_len: {server.data_len}'
+                f'addr: {server._addr}, latency: {latency}, data_len: {server.data_len}'
             )
 
         ret = 0
@@ -514,7 +514,7 @@ class MDALPClient(MDALP):
                 if server.data_exhausted: continue
                 if server.time_since_last_send >= self.TIMEOUT:
                     logger.info(
-                        f'Timeout! {server.addr} | seq: {server.seq_curr}')
+                        f'Timeout! {server._addr} | seq: {server.seq_curr}')
                     server.send_curr()
 
             response, addr_from = self.recv_packet_from(timeout=self.TIMEOUT)
@@ -523,7 +523,7 @@ class MDALPClient(MDALP):
             if not (response.get('Type') == 3 and response.get('TID') == tid):
                 continue
 
-            server = next((s for s in recv_servers if s.addr == addr_from),
+            server = next((s for s in recv_servers if s._addr == addr_from),
                           None)
             if server is None: continue
 
@@ -532,7 +532,7 @@ class MDALPClient(MDALP):
                 new_seq = response.get('SEQ') + 1
                 if server.seq_min <= new_seq < server.seq_len:
                     logger.info(
-                        f'Server {server.addr}: Seq number mismatch. Updating seq_curr to {new_seq} from {server.seq_curr}.'
+                        f'Server {server._addr}: Seq number mismatch. Updating seq_curr to {new_seq} from {server.seq_curr}.'
                     )
                     server.seq_curr = new_seq
 
@@ -559,7 +559,7 @@ class MDALPClient(MDALP):
         Returns:
             int: Number of data in bytes sent
         '''
-        response = self.send_intent()
+        response = self._send_intent()
         if response is None: return 0
 
         tid = response.get('TID')
