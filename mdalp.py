@@ -108,14 +108,6 @@ class MDALP:
     def __exit__(self, type, value, traceback):
         self.close()
 
-    @property
-    def host(self):
-        return self.addr[0]
-
-    @property
-    def port(self):
-        return self.addr[1]
-
     @staticmethod
     def parse_message(message: str) -> Dict[str, Any]:
         if len(message) > 0 and message[-1] != ';': message += ';'
@@ -349,7 +341,7 @@ class MDALPClient(MDALP):
                 if server.data_exhausted: continue
                 if server.time_since_last_send >= self.TIMEOUT:
                     logger.info(
-                        f'Timeout! {server.host} | seq: {server.seq_curr}')
+                        f'Timeout! {server.addr} | seq: {server.seq_curr}')
                     server.send_curr()
 
             response, addr_from = self.recv_packet_from(timeout=self.TIMEOUT)
@@ -367,7 +359,7 @@ class MDALPClient(MDALP):
                 new_seq = response.get('SEQ') + 1
                 if server.seq_min <= new_seq < server.seq_len:
                     logger.info(
-                        f'Server {server.host}: Seq number mismatch. Updating seq_curr to {new_seq} from {server.seq_curr}.'
+                        f'Server {server.addr}: Seq number mismatch. Updating seq_curr to {new_seq} from {server.seq_curr}.'
                     )
                     server.seq_curr = new_seq
 
