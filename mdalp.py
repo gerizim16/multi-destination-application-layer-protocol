@@ -1,3 +1,22 @@
+'''
+usage: python mdalp.py -a ADDR -p PORT -f FILE [-h] [-v] [-m {1,2}] [-s SERVER]
+
+Send text files using multidestination application-layer protocol (MDALP)
+
+required arguments:
+  -a ADDR, --addr ADDR  IPv4 address of the server
+  -p PORT, --port PORT  UDP port of the server
+  -f FILE, --file FILE  filename of the payload
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --verbose
+  -m {1,2}, --mode {1,2}
+                        mode of the load balancing {1=load balance, 2=no load balancing}
+  -s SERVER, --server SERVER
+                        index of the server to use when no load balancing mode is used
+'''
+
 import argparse
 import asyncio
 import itertools
@@ -9,26 +28,53 @@ import math
 import platform
 from subprocess import SubprocessError
 from time import perf_counter
-from typing import Any, Dict, Iterable, Iterator, List, Sequence, Union
+from typing import Any, Dict, Iterable, Iterator, List, Sequence, Tuple, Union
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 
 
 def argsort(seq: Sequence, *args, **kargs) -> List:
+    '''Returns the indices that would sort an array.
+
+    Args:
+        seq (Sequence): Sequence to sort.
+
+    Returns:
+        List: List of indices that sort `seq`.
+    '''
     return sorted(range(len(seq)), key=seq.__getitem__, *args, **kargs)
 
 
 def normalize_to_sum(iter: Iterable[Union[int, float]]) -> List[float]:
+    '''Returns the scaled `iter` to have a sum of 1.
+
+    Args:
+        iter (Iterable[Union[int, float]]): The iterable to normalize.
+
+    Returns:
+        List[float]: Scaled `iter`
+    '''
     it1, it2 = itertools.tee(iter)
     total = sum(it1)
     return [float(i) / total for i in it2]
 
 
 def split_by_ratio(seq: Sequence,
-                   ratios: Iterable,
+                   weights: Iterable,
                    min_length: int = 0) -> Iterator[Sequence]:
-    ratio_norm = normalize_to_sum(ratios)
+    '''Split `seq` according to `weights`. Tries to satisfy the optional
+    `min_length` argument.
+
+    Args:
+        seq (Sequence): Sequence to split
+        weights (Iterable): Ratio
+        min_length (int, optional): Minimum splice length. Defaults to 0.
+
+    Yields:
+        Iterator[Sequence]: a splice of `seq`
+    '''
+    ratio_norm = normalize_to_sum(weights)
     ratio_norm_argsort = argsort(ratio_norm)
 
     seq_len = len(seq)
@@ -48,6 +94,19 @@ def split_by_ratio(seq: Sequence,
 
 
 async def get_average_ping(host: str, n: int = 3) -> float:
+    '''Async function to get average ping of `n` echo requests to `host`
+
+    Args:
+        host (str): host
+        n (int, optional): Number of echo requests. Defaults to 3.
+
+    Raises:
+        SubprocessError: OS ping command error
+        RuntimeError: Cannot parse ping command
+
+    Returns:
+        float: Average ping
+    '''
     number = r'\d+(?:\.\d+)?'
     if platform.system().lower() == 'windows':
         count_flag = '-n'
@@ -74,6 +133,14 @@ async def get_average_ping(host: str, n: int = 3) -> float:
 
 
 def get_latencies(hosts: Iterable[str]) -> List:
+    '''Returns a list of the round trip times of `hosts`
+
+    Args:
+        hosts (Iterable[str]): Hosts
+
+    Returns:
+        List: List of round trip times
+    '''
     async_pings = [get_average_ping(host) for host in hosts]
     pings_future = asyncio.gather(*async_pings)
 
@@ -85,11 +152,26 @@ def get_latencies(hosts: Iterable[str]) -> List:
 
 
 def batch_seq(seq: Sequence, size: int) -> Iterator[Sequence]:
+    '''Batch a sequence into `size` lenghts
+
+    Args:
+        seq (Sequence): The sequence
+        size (int): Length size
+
+    Returns:
+        Iterator[Sequence]: Batched `seq`
+    '''
     return (seq[i:i + size] for i in range(0, len(seq), size))
 
 
 class MDALP:
+    '''Abstract base class of MDALP'''
     def __init__(self, addr, sock: socket.socket = None):
+        '''
+        Args:
+            addr: IP address of the server
+            sock (socket.socket, optional): Socket to use, creats new socket object if None. Defaults to None.
+        '''
         self.sock: socket.socket = sock if sock is not None else socket.socket(
             socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.setblocking(False)
@@ -101,6 +183,7 @@ class MDALP:
         return self
 
     def close(self):
+        '''Call when done'''
         self.sel.unregister(self.sock)
         self.sock.close()
         logger.info(f'MDALP: {self.addr} closed.')
@@ -110,6 +193,14 @@ class MDALP:
 
     @staticmethod
     def parse_message(message: str) -> Dict[str, Any]:
+        '''Parses a message into a dictionary
+
+        Args:
+            message (str): Message
+
+        Returns:
+            Dict[str, Any]: Parsed info
+        '''
         if len(message) > 0 and message[-1] != ';': message += ';'
         fields = [
             ('Type', r'\d+'),
@@ -138,6 +229,17 @@ class MDALP:
                     tid: int = None,
                     seq: int = None,
                     data: bytes = None) -> int:
+        '''Send a packet
+
+        Args:
+            type (int): Packet type
+            tid (int, optional): Transaction ID. Defaults to None.
+            seq (int, optional): Sequence number. Defaults to None.
+            data (bytes, optional): Payload. Defaults to None.
+
+        Returns:
+            int: Number of bytes of `data` sent not including header.
+        '''
         header = f'Type:{type};'
         if tid is not None: header += f'TID:{tid};'
         if seq is not None: header += f'SEQ:{seq};'
@@ -157,6 +259,15 @@ class MDALP:
     def recv_packet(self,
                     buf_size: int = 1024,
                     timeout: float = None) -> Dict[str, Any]:
+        '''Returns parsed message received
+
+        Args:
+            buf_size (int, optional): Buffer size. Defaults to 1024.
+            timeout (float, optional): Timeout in seconds. Defaults to None.
+
+        Returns:
+            Dict[str, Any]: Parsed message.
+        '''
         events = self.sel.select(timeout)
         if len(events) == 0:
             logger.info(f'Receive timeout!')
@@ -180,7 +291,16 @@ class MDALP:
 
     def recv_packet_from(self,
                          buf_size: int = 1024,
-                         timeout: float = None) -> Dict[str, Any]:
+                         timeout: float = None) -> Tuple[Dict[str, Any], Any]:
+        '''Returns tuple of parsed message and address of sender
+
+        Args:
+            buf_size (int, optional): Buffer size. Defaults to 1024.
+            timeout (float, optional): Timeout in seconds. Defaults to None.
+
+        Returns:
+            Tuple[Dict[str, Any], Any]: Parsed message and address
+        '''
         events = self.sel.select(timeout)
         if len(events) == 0:
             logger.info(f'Receive timeout!')
@@ -199,12 +319,22 @@ class MDALP:
 
 
 class MDALPRecvClient(MDALP):
+    '''Client class for the MDALP receiving server.'''
     def __init__(self,
                  addr,
                  sock: socket.socket,
                  tid: int,
-                 data_seq: Sequence,
+                 data_seq: Sequence[bytes],
                  seq_start: int = 0):
+        '''
+        Args:
+            addr ([type]): IP address of the server
+            sock (socket.socket): Socket to use
+                                  Usually the socket of the MDALP client
+            tid (int): Transaction ID
+            data_seq (Sequence[bytes]): Data to be sent to the receiving server
+            seq_start (int, optional): Starting sequence number. Defaults to 0.
+        '''
         super().__init__(addr, sock=sock)
         self.tid = tid
         self._last_send = None
@@ -241,23 +371,39 @@ class MDALPRecvClient(MDALP):
         return perf_counter() - self._last_send
 
     def reset(self):
+        '''Reset data iteration'''
         self._curr_idx = 0
 
-    def get_curr_data(self):
+    def get_curr_data(self) -> bytes:
+        '''Returns the current data in iteration
+
+        Returns:
+            bytes: Bytes of data, None if iteration is finished
+        '''
         return self._seq[self._curr_idx] if not self.data_exhausted else None
 
-    def get_next_data(self):
+    def get_next_data(self) -> bytes:
+        '''Returns the next data in iteration.
+        Current index/sequence is incremented
+
+        Returns:
+            bytes: Bytes of data, None if iteration is finished
+        '''
         self._curr_idx = min(self._curr_idx + 1, len(self._seq))
         if self.data_exhausted: return None
         return self._seq[self._curr_idx]
 
     def send_curr(self):
+        '''Sends the current data in iteration'''
         data = self.get_curr_data()
         if data is None: return
         self.send_packet(type=2, tid=self.tid, seq=self.seq_curr, data=data)
         self._last_send = perf_counter()
 
     def send_next(self):
+        '''Sends the next data in iteration
+        Current index/sequence is incremented
+        '''
         data = self.get_next_data()
         if data is None: return
         self.send_packet(type=2, tid=self.tid, seq=self.seq_curr, data=data)
@@ -265,12 +411,18 @@ class MDALPRecvClient(MDALP):
 
 
 class MDALPClient(MDALP):
+    '''Client class for the MDALP orchestrator server.'''
     MAX_PAYLOAD = 100
     RECV_PORT = 4650
     TIMEOUT = 3
     MIN_RATIO = 0.1
 
     def send_intent(self) -> Dict[str, Any]:
+        '''Returns the parsed type 1 message after sending the type 0.
+
+        Returns:
+            Dict[str, Any]: Parsed message
+        '''
         self.send_packet(0)
         logger.info(f'Intent message sent to {self.addr}.')
         response = None
@@ -281,7 +433,17 @@ class MDALPClient(MDALP):
         logger.info(f'Response: {response}')
         return response
 
-    def _send_single_server(self, host, tid: int, data: bytes) -> int:
+    def _send_single_server(self, host: str, tid: int, data: bytes) -> int:
+        '''Send `data` to `host` with transactio ID `tid`.
+
+        Args:
+            host (str): Host
+            tid (int): Transaction ID
+            data (bytes): Data
+
+        Returns:
+            int: Number of data in bytes sent
+        '''
         addr = (host, self.RECV_PORT)
         server = MDALPRecvClient(addr, self.sock.dup(), tid,
                                  batch_seq(data, self.MAX_PAYLOAD))
@@ -304,8 +466,19 @@ class MDALPClient(MDALP):
 
         return ret
 
-    def _send_load_balance(self, hosts: Iterable, tid: int,
+    def _send_load_balance(self, hosts: Iterable[str], tid: int,
                            data: bytes) -> int:
+        '''Send `data` to `hosts` with transactio ID `tid`.
+        Load balances using the inverse of round trip times
+
+        Args:
+            hosts (Iterable[str]): Hosts
+            tid (int): Transaction ID
+            data (bytes): Data
+
+        Returns:
+            int: Number of data in bytes sent
+        '''
         hosts = list(hosts)
 
         # get round trip times
@@ -376,6 +549,16 @@ class MDALPClient(MDALP):
              data: bytes,
              load_balance: bool = True,
              nth_server: int = 1) -> int:
+        '''Send data.
+
+        Args:
+            data (bytes): Data to send
+            load_balance (bool, optional): Flag if load balancing should be used. Defaults to True.
+            nth_server (int, optional): The 1-indexed server number to use. Defaults to 1.
+
+        Returns:
+            int: Number of data in bytes sent
+        '''
         response = self.send_intent()
         if response is None: return 0
 
