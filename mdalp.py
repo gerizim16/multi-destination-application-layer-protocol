@@ -35,7 +35,7 @@ def split_by_ratio(seq: Sequence,
     sub_seq_lens = [0] * len(ratio_norm)
     remaining = seq_len
     for idx, ratio in zip(ratio_norm_argsort, sorted(ratio_norm)):
-        sub_len = min(max(math.ceil(ratio * seq_len), min_length), remaining)
+        sub_len = min(max(round(ratio * seq_len), min_length), remaining)
         remaining -= sub_len
         sub_seq_lens[idx] = sub_len
 
