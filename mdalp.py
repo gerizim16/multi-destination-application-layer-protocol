@@ -170,7 +170,7 @@ class MDALP:
         '''
         Args:
             addr: IP address of the server
-            sock (socket.socket, optional): Socket to use, creats new socket object if None. Defaults to None.
+            sock (socket.socket, optional): Socket to use, creates new socket object if None. Defaults to None.
         '''
         self.sock: socket.socket = sock if sock is not None else socket.socket(
             socket.AF_INET, socket.SOCK_DGRAM)
