@@ -588,13 +588,13 @@ def main(args):
 
     logger.info(f'Parsed args: {args}')
 
-    with MDALPClient((args.addr, args.port)) as sock:
+    with MDALPClient((args.addr, args.port)) as client:
         data = args.file.read().encode()
         start = perf_counter()
         if args.mode == 1:
-            ret = sock.send(data)
+            ret = client.send(data)
         else:
-            ret = sock.send(data, load_balance=False, nth_server=args.server)
+            ret = client.send(data, load_balance=False, nth_server=args.server)
         end = perf_counter()
         logger.debug(f'return: {ret} | data length: {len(data)}')
         logger.info(f'Send took {end - start}s, with arguments {args}')

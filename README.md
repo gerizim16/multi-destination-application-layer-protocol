@@ -70,6 +70,6 @@ MDALPClient.close()
 ## Using with the Python context manager
 To simplify usage and avoid the need of calling the `close()` method, one can use Python's context manager.
 ```python
-with mdalp.MDALPClient((host, port)) as sock:
-    sock.send(data)
+with mdalp.MDALPClient((host, port)) as client:
+    client.send(data)
 ```
