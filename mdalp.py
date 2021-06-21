@@ -199,7 +199,7 @@ class MDALP:
             message (str): Message
 
         Returns:
-            Dict[str, Any]: Parsed info
+            Dict[str, Any]: Parsed info, None if pattern matching failed.
         '''
         if len(message) > 0 and message[-1] != ';': message += ';'
         fields = [
@@ -277,7 +277,8 @@ class MDALP:
 
         if addr != self._addr:
             logger.info(
-                f'Data received from {addr}, expected address is {self._addr}.')
+                f'Data received from {addr}, expected address is {self._addr}.'
+            )
             return None
 
         if not data:
@@ -351,8 +352,8 @@ class MDALPRecvClient(MDALP):
         return self._base
 
     @property
-    def seq_len(self) -> int:
-        return len(self._seq) + self._base
+    def seq_max(self) -> int:
+        return len(self._seq) + self._base - 1
 
     @property
     def seq_curr(self) -> int:
@@ -393,21 +394,30 @@ class MDALPRecvClient(MDALP):
         if self.data_exhausted: return None
         return self._seq[self._curr_idx]
 
-    def send_curr(self):
-        '''Sends the current data in iteration'''
+    def send_curr(self) -> bool:
+        '''Sends the current data in iteration
+
+        Returns:
+            bool: Returns True if there was data to send, else False
+        '''
         data = self.get_curr_data()
-        if data is None: return
+        if data is None: return False
         self.send_packet(type=2, tid=self._tid, seq=self.seq_curr, data=data)
         self._last_send = perf_counter()
+        return True
 
-    def send_next(self):
+    def send_next(self) -> bool:
         '''Sends the next data in iteration
         Current index/sequence is incremented
+
+        Returns:
+            bool: Returns True if there was data to send, else False
         '''
         data = self.get_next_data()
-        if data is None: return
+        if data is None: return False
         self.send_packet(type=2, tid=self._tid, seq=self.seq_curr, data=data)
         self._last_send = perf_counter()
+        return True
 
 
 class MDALPClient(MDALP):
@@ -530,7 +540,7 @@ class MDALPClient(MDALP):
             if response.get('SEQ') != server.seq_curr:
                 # not expected acknowledgement sequence number
                 new_seq = response.get('SEQ') + 1
-                if server.seq_min <= new_seq < server.seq_len:
+                if server.seq_min <= new_seq <= server.seq_max:
                     logger.info(
                         f'Server {server._addr}: Seq number mismatch. Updating seq_curr to {new_seq} from {server.seq_curr}.'
                     )
