@@ -1,0 +1,146 @@
+python3 mdalp.py -a 18.139.29.142 -p 4650 -f large_payload -vv -m 2 -s 1
+INFO:__main__:Parsed args: Namespace(addr='18.139.29.142', file=<_io.TextIOWrapper name='large_payload' mode='r' encoding='UTF-8'>, mode=2, port=4650, server=1, verbose=2)
+DEBUG:__main__:client -> ('18.139.29.142', 4650) (return 0): b'Type:0;'
+INFO:__main__:Intent message sent to ('18.139.29.142', 4650).
+DEBUG:__main__:Parsed data: {'Type': 1, 'TID': 3755, 'SEQ': None, 'DATA': [{'ip_address': '177.71.168.45', 'name': '5th Receiver'}, {'ip_address': '54.200.52.112', 'name': '4th Receiver'}, {'ip_address': '18.134.193.153', 'name': '2nd Receiver'}]}
+INFO:__main__:Response: {'Type': 1, 'TID': 3755, 'SEQ': None, 'DATA': [{'ip_address': '177.71.168.45', 'name': '5th Receiver'}, {'ip_address': '54.200.52.112', 'name': '4th Receiver'}, {'ip_address': '18.134.193.153', 'name': '2nd Receiver'}]}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:0;DATA:Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra quis risus sed luctus. Aliq'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 0, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:1;DATA:uam erat volutpat. Aliquam eget massa non dolor finibus pulvinar id vitae metus. Praesent pellentesq'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 1, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:2;DATA:ue nulla at elit consectetur sollicitudin. Fusce velit enim, cursus fringilla ante id, sollicitudin '
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 2, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:3;DATA:gravida odio. Fusce sem neque, consequat vel fermentum vel, placerat vitae lectus. Aliquam porttitor'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 3, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:4;DATA: ex metus, sit amet malesuada arcu ultricies eu. Etiam pulvinar rutrum risus quis volutpat. Sed eget'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 4, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:5;DATA: magna suscipit, ultrices elit quis, accumsan tortor. Nam elementum augue nec quam vestibulum faucib'
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:5;DATA: magna suscipit, ultrices elit quis, accumsan tortor. Nam elementum augue nec quam vestibulum faucib'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 5, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:6;DATA:us. Sed sed accumsan augue. Sed dignissim orci a mauris auctor feugiat. Morbi convallis sem at neque'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 6, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:7;DATA: dictum, eget faucibus leo sodales. Pellentesque ultrices felis at vehicula porttitor. Nunc laoreet '
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 7, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:8;DATA:iaculis tempor. Nullam nec egestas quam. Sed cursus magna a sem lacinia mattis. Mauris augue sem, fa'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 8, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:9;DATA:ucibus eget dui at, efficitur efficitur mauris. Phasellus tempor turpis id imperdiet mattis. Nulla e'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 9, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:10;DATA:u metus in velit lobortis efficitur. Duis pulvinar risus eget dictum convallis. Nullam eros turpis, '
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 10, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:11;DATA:scelerisque sed dui sit amet, dignissim tristique enim. Duis condimentum arcu non sollicitudin fring'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 11, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:12;DATA:illa. Quisque feugiat tempor viverra. Proin pulvinar feugiat urna non vestibulum. Donec sed vehicula'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 12, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:13;DATA: libero. Ut condimentum nulla eu mi bibendum lacinia. Curabitur mattis velit metus, at rhoncus ligul'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 13, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:14;DATA:a laoreet vitae. Quisque consequat molestie mattis. In hac habitasse platea dictumst. Fusce aliquet,'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 14, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:15;DATA: felis ut molestie mollis, metus elit mollis ante, quis dignissim lacus turpis a libero. In hac habi'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 15, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:16;DATA:tasse platea dictumst. Quisque suscipit nunc in urna porta gravida. Nullam auctor lorem quis lorem v'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 16, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:17;DATA:olutpat, a semper nisl semper. Pellentesque finibus tempor ultrices. Duis ut lorem et augue blandit '
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 17, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:18;DATA:posuere non a enim. Nulla facilisi. Nam tristique orci tellus, eget dictum augue sodales id. Nunc ru'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 18, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:19;DATA:trum sodales tortor, ut tincidunt risus elementum vitae. Sed egestas est dui, ac ultricies eros vehi'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 19, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:20;DATA:cula vel. Sed tincidunt in quam nec dictum. Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:20;DATA:cula vel. Sed tincidunt in quam nec dictum. Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 20, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:21;DATA: Etiam varius urna vel neque congue, eu pharetra lorem lobortis. Duis venenatis diam consectetur orc'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 21, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:22;DATA:i sollicitudin, ut sodales mauris ullamcorper. Pellentesque quis metus quis nunc fringilla maximus n'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 22, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:23;DATA:on at nisl. In hendrerit ligula a est rhoncus scelerisque. Aenean id risus eget est tristique vehicu'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 23, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:24;DATA:la ac vel lectus. Ut sollicitudin nisi at ultricies volutpat. Aliquam magna diam, molestie eget null'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 24, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:25;DATA:a ut, commodo euismod tellus. Donec rhoncus est dui, fermentum porttitor nisi maximus quis. Sed a co'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 25, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:26;DATA:nsectetur dui. Nam ut mollis mi, in porta ligula. Cras cursus ultrices dolor vitae auctor. Aliquam v'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 26, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:27;DATA:iverra tortor at feugiat vestibulum. Integer rhoncus sed felis sit amet cursus. Praesent efficitur s'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 27, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:28;DATA:ed lectus eu ultrices. Cras faucibus enim et tincidunt viverra. Nullam quis porta dui, eget aliquet '
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 28, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:29;DATA:enim. Cras laoreet lectus vel ligula varius, eget pellentesque nulla placerat. Ut non tincidunt tort'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 29, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:30;DATA:or, a fringilla ligula. Ut eu purus eget tortor tempor volutpat. Sed sed urna non mauris tempor temp'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 30, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:31;DATA:or. Sed accumsan, mauris nec efficitur faucibus, orci massa dignissim nunc, eu suscipit lorem libero'
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:31;DATA:or. Sed accumsan, mauris nec efficitur faucibus, orci massa dignissim nunc, eu suscipit lorem libero'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 31, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:32;DATA: eu turpis. Quisque non est vitae turpis efficitur placerat vel et augue. Sed vitae dolor leo. Praes'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 32, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:33;DATA:ent vestibulum faucibus nisi, non finibus lorem mattis in. Praesent pulvinar venenatis felis, vitae '
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 33, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:34;DATA:tincidunt nunc posuere a. Vestibulum et enim elementum, viverra tellus ut, sodales erat. Suspendisse'
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:34;DATA:tincidunt nunc posuere a. Vestibulum et enim elementum, viverra tellus ut, sodales erat. Suspendisse'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 34, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:35;DATA: maximus est eros, vitae tincidunt erat consequat a. Cras felis felis, vulputate eu rhoncus eget, or'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 35, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:36;DATA:nare et justo. Morbi quis porta dui, a scelerisque velit. Cras sed malesuada elit. Pellentesque maxi'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 36, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:37;DATA:mus, nulla vitae vehicula vehicula, dui tortor mattis ligula, nec malesuada turpis sapien varius nul'
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:37;DATA:mus, nulla vitae vehicula vehicula, dui tortor mattis ligula, nec malesuada turpis sapien varius nul'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 37, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:38;DATA:la. Quisque vitae massa nec leo congue ullamcorper vel pretium lectus. Maecenas a leo lectus. Praese'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 38, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:39;DATA:nt vehicula lacinia lectus, vel venenatis nisl aliquam id. Aliquam erat volutpat. Fusce mollis vel l'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 39, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:40;DATA:ibero a dignissim. Praesent condimentum aliquet finibus. Nam et elit lorem. Praesent sit amet dolor '
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:40;DATA:ibero a dignissim. Praesent condimentum aliquet finibus. Nam et elit lorem. Praesent sit amet dolor '
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 40, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:41;DATA:non velit blandit placerat. Aliquam vitae ligula orci. Interdum et malesuada fames ac ante ipsum pri'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 41, 'DATA': None}
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:42;DATA:mis in faucibus. Quisque tincidunt dapibus tellus eu euismod. Ut ac dui sit amet tortor mattis congu'
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:42;DATA:mis in faucibus. Quisque tincidunt dapibus tellus eu euismod. Ut ac dui sit amet tortor mattis congu'
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:42;DATA:mis in faucibus. Quisque tincidunt dapibus tellus eu euismod. Ut ac dui sit amet tortor mattis congu'
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:42;DATA:mis in faucibus. Quisque tincidunt dapibus tellus eu euismod. Ut ac dui sit amet tortor mattis congu'
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:42;DATA:mis in faucibus. Quisque tincidunt dapibus tellus eu euismod. Ut ac dui sit amet tortor mattis congu'
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:42;DATA:mis in faucibus. Quisque tincidunt dapibus tellus eu euismod. Ut ac dui sit amet tortor mattis congu'
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:42;DATA:mis in faucibus. Quisque tincidunt dapibus tellus eu euismod. Ut ac dui sit amet tortor mattis congu'
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:42;DATA:mis in faucibus. Quisque tincidunt dapibus tellus eu euismod. Ut ac dui sit amet tortor mattis congu'
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:42;DATA:mis in faucibus. Quisque tincidunt dapibus tellus eu euismod. Ut ac dui sit amet tortor mattis congu'
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:42;DATA:mis in faucibus. Quisque tincidunt dapibus tellus eu euismod. Ut ac dui sit amet tortor mattis congu'
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:42;DATA:mis in faucibus. Quisque tincidunt dapibus tellus eu euismod. Ut ac dui sit amet tortor mattis congu'
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:42;DATA:mis in faucibus. Quisque tincidunt dapibus tellus eu euismod. Ut ac dui sit amet tortor mattis congu'
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:42;DATA:mis in faucibus. Quisque tincidunt dapibus tellus eu euismod. Ut ac dui sit amet tortor mattis congu'
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:42;DATA:mis in faucibus. Quisque tincidunt dapibus tellus eu euismod. Ut ac dui sit amet tortor mattis congu'
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -> ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:42;DATA:mis in faucibus. Quisque tincidunt dapibus tellus eu euismod. Ut ac dui sit amet tortor mattis congu'
+^CINFO:__main__:MDALP: ('18.139.29.142', 4650) closed.
+Traceback (most recent call last):
+  File "mdalp.py", line 660, in <module>
+    main(args)
+  File "mdalp.py", line 609, in main
+    ret = client.send(data, load_balance=False, nth_server=args.server)
+  File "mdalp.py", line 587, in send
+    ret = self._send_single_server(hosts[nth_server - 1], tid, data)
+  File "mdalp.py", line 465, in _send_single_server
+    response = server.recv_packet(timeout=self.TIMEOUT)
+  File "mdalp.py", line 271, in recv_packet
+    events = self._sel.select(timeout)
+  File "/usr/lib/python3.8/selectors.py", line 468, in select
+    fd_event_list = self._selector.poll(timeout, max_ev)
+KeyboardInterrupt
