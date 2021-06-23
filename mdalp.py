@@ -579,13 +579,15 @@ class MDALPClient(MDALP):
         hosts = [server.get('ip_address') for server in response.get('DATA')]
         if len(hosts) == 0: return 0
 
+        start = perf_counter()
         ret = 0
         if load_balance:
             ret = self._send_load_balance(hosts, tid, data)
         else:
             ret = self._send_single_server(hosts[nth_server - 1], tid, data)
+        end = perf_counter()
 
-        logger.info(f'Send completed.')
+        logger.info(f'Send took {end - start}s.')
         return ret
 
 
@@ -601,14 +603,11 @@ def main(args):
 
     with MDALPClient((args.addr, args.port)) as client:
         data = args.file.read().encode()
-        start = perf_counter()
         if args.mode == 1:
             ret = client.send(data)
         else:
             ret = client.send(data, load_balance=False, nth_server=args.server)
-        end = perf_counter()
         logger.debug(f'return: {ret} | data length: {len(data)}')
-        logger.info(f'Send took {end - start}s, with arguments {args}')
 
 
 if __name__ == '__main__':
