@@ -425,6 +425,7 @@ class MDALPClient(MDALP):
     MAX_PAYLOAD = 100
     RECV_PORT = 4650
     TIMEOUT = 3
+    TIMEOUT_INTENT = 120
     MIN_RATIO = 0.1
 
     def _send_intent(self) -> Dict[str, Any]:
@@ -437,7 +438,7 @@ class MDALPClient(MDALP):
         logger.info(f'Intent message sent to {self._addr}.')
         response = None
         while response is None:
-            response = self.recv_packet(timeout=5)
+            response = self.recv_packet(timeout=self.TIMEOUT_INTENT)
 
         if response.get('Type') != 1: return None
         logger.info(f'Response: {response}')
