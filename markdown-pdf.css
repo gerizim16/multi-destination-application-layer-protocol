@@ -1,0 +1,8 @@
+svg {
+    height: auto;
+}
+
+:not(pre):not(.hljs) > code {
+    color: hotpink !important;
+	font-size: inherit;
+}

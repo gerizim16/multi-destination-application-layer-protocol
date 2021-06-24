@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>documentation.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+<link rel="stylesheet" href="file:///c%3A/Users/Gerizim/Documents/projects/project/markdown-pdf.css" type="text/css">
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="1-multi-destination-application-layer-protocol-client">1. Multi Destination Application Layer Protocol Client</h1>
+<p>Send data to a MDALP server.</p>
+<p>Contacts an <em>orchestrator</em> server to receive a list of <em>receiving</em> servers. Distributes sending of data to receiving servers according to latency.</p>
+<!-- omit in toc -->
+<h2 id="table-of-contents">Table of contents</h2>
+<ul>
+<li><a href="#1-multi-destination-application-layer-protocol-client">1. Multi Destination Application Layer Protocol Client</a>
+<ul>
+<li><a href="#11-requirements">1.1. Requirements</a></li>
+</ul>
+</li>
+<li><a href="#2-implementation-level">2. Implementation level</a></li>
+<li><a href="#3-overview">3. Overview</a></li>
+<li><a href="#4-documentation">4. Documentation</a>
+<ul>
+<li><a href="#41-utility-functions">4.1. Utility functions</a>
+<ul>
+<li><a href="#411-argsort">4.1.1. argsort</a></li>
+<li><a href="#412-normalize-to-sum">4.1.2. normalize to sum</a></li>
+<li><a href="#413-split-by-ratio">4.1.3. split by ratio</a></li>
+<li><a href="#414-get-average-ping">4.1.4. get average ping</a></li>
+<li><a href="#415-get-latencies">4.1.5. get latencies</a></li>
+<li><a href="#416-batch-seq">4.1.6. batch seq</a></li>
+</ul>
+</li>
+<li><a href="#42-mdalp-abstract-class">4.2. MDALP abstract class</a>
+<ul>
+<li><a href="#421-init">4.2.1. init</a></li>
+<li><a href="#422-enter">4.2.2. enter</a></li>
+<li><a href="#423-close">4.2.3. close</a></li>
+<li><a href="#424-exit">4.2.4. exit</a></li>
+<li><a href="#425-parse-message">4.2.5. parse message</a></li>
+<li><a href="#426-send-packet">4.2.6. send packet</a></li>
+<li><a href="#427-recv-packet">4.2.7. recv packet</a></li>
+<li><a href="#428-recv-packet-from">4.2.8. recv packet from</a></li>
+</ul>
+</li>
+<li><a href="#43-mdalprecvclient">4.3. MDALPRecvClient</a>
+<ul>
+<li><a href="#431-init">4.3.1. init</a></li>
+<li><a href="#432-properties">4.3.2. properties</a></li>
+<li><a href="#433-reset">4.3.3. reset</a></li>
+<li><a href="#434-get-curr-data">4.3.4. get curr data</a></li>
+<li><a href="#435-get-next-data">4.3.5. get next data</a></li>
+<li><a href="#436-send-curr">4.3.6. send curr</a></li>
+<li><a href="#437-send-next">4.3.7. send next</a></li>
+</ul>
+</li>
+<li><a href="#44-mdalpclient">4.4. MDALPClient</a>
+<ul>
+<li><a href="#441-send-intent">4.4.1. send intent</a></li>
+<li><a href="#442-send-single-server">4.4.2. send single server</a></li>
+<li><a href="#443-send-load-balance">4.4.3. send load balance</a></li>
+<li><a href="#444-send">4.4.4. send</a></li>
+</ul>
+</li>
+<li><a href="#45-main">4.5. main</a>
+<ul>
+<li><a href="#451-command-line-parsing">4.5.1. command-line parsing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#5-load-balancing-vs-non-load-balancing">5. Load balancing vs Non load balancing</a>
+<ul>
+<li><a href="#51-load-balancing">5.1. Load balancing</a></li>
+<li><a href="#52-non-load-balancing">5.2. Non load balancing</a>
+<ul>
+<li><a href="#server-a">Server A</a></li>
+<li><a href="#server-b">Server B</a></li>
+<li><a href="#server-c">Server C</a></li>
+</ul>
+</li>
+<li><a href="#53-comparison">5.3. Comparison</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="11-requirements">1.1. Requirements</h2>
+<pre class="hljs"><code><div>Python &gt;= 3.6
+</div></code></pre>
+<h1 id="2-implementation-level">2. Implementation level</h1>
+<p>Level 4</p>
+<ul>
+<li>Able to send Type 0 messages, and solicit Type 1 message reply from the orchestrator server.</li>
+<li>Able to send payload to a single receiving server among those listed by the receiving server. Able to do retransmissions properly.</li>
+<li>Able to load-balance across several receiving servers specified by the the orchestrator server, in a way compliant with specifications given (ratio, sequence number, etc.).</li>
+<li>Submission has a performance comparison between load-balancing and non-load-balancing modes.</li>
+</ul>
+<div style="page-break-after: always;"></div>
+<h1 id="3-overview">3. Overview</h1>
+<p>The following shows the overview of how the load balancing send and non load balancing send work. Observe that in both modes, it uses the <strong>stop-and-wait</strong> protocol to send packets to a receiving server as required in the specifications. But in load balancing mode, it is able to handle multiple receiving servers at once which effectively saves time by <em>asynchronously</em> sending data.</p>
+<pre><code class="language-mermaid"><div class="mermaid">stateDiagram-v2
+    state "send intent to orchestrator server" as intent
+    state "load balance?" as ifloadBalance
+    state ifLoadBalanceChoice <<choice>>
+    state "send with load balancing" as loadBalance
+    state loadBalance {
+        state "ping receiving servers asynchronously" as ping1
+        state "split data according to latency" as split1
+        state "send first data to each receiving server" as send1
+        state "main loop" as loop1
+        state loop1 {
+            state "check timeouts of receiving servers" as time1
+            state "send current data\nfor that server" as sendTimeout1
+            state "wait for\nacknowledgement\nfrom any server" as ack1
+            state "determine which receiving\nserver acknowledged" as det1
+            state "send current data" as currData1
+            state "send next data" as nextData1
+            [*] --> time1
+            time1 --> sendTimeout1 : Receiving server\ntimeout
+            sendTimeout1 --> time1
+            time1 --> ack1 : All timeouts\nchecked
+            ack1 --> time1 : Timeout\nno ack received
+            ack1 --> det1 : Acknowledgement received
+            det1 --> currData1 : Unexpected response
+            det1 --> nextData1 : Acknowledged\nas expected
+            currData1 --> time1
+            nextData1 --> time1
+        }
+        [*] --> ping1
+        ping1 --> split1
+        split1 --> send1
+        send1 --> loop1
+        loop1 --> [*] : All data sent
+    }
+    state "send without load balancing" as noLoadBalance
+    state noLoadBalance {
+        state "send current data" as currData2
+        state "send next data" as nextData2
+        state "wait for acknowledgement" as ack2
+        [*] --> currData2
+        currData2 --> ack2
+        ack2 --> currData2 : Timeout / unexpected response
+        ack2 --> nextData2 : Acknowledged as expected
+        nextData2 --> ack2
+        ack2 --> [*] : All data\nsent
+    }
+
+    [*] --> intent
+    intent --> ifloadBalance
+    ifloadBalance --> ifLoadBalanceChoice
+    ifLoadBalanceChoice --> loadBalance : True
+    ifLoadBalanceChoice --> noLoadBalance : False
+    loadBalance --> [*]
+    noLoadBalance --> [*]
+</div></code></pre>
+<div style="page-break-after: always;"></div>
+<h1 id="4-documentation">4. Documentation</h1>
+<p>Import required python modules.</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">import</span> argparse
+<span class="hljs-keyword">import</span> asyncio
+<span class="hljs-keyword">import</span> itertools
+<span class="hljs-keyword">import</span> logging
+<span class="hljs-keyword">import</span> socket
+<span class="hljs-keyword">import</span> selectors
+<span class="hljs-keyword">import</span> re
+<span class="hljs-keyword">import</span> math
+<span class="hljs-keyword">import</span> platform
+<span class="hljs-keyword">from</span> subprocess <span class="hljs-keyword">import</span> SubprocessError
+<span class="hljs-keyword">from</span> time <span class="hljs-keyword">import</span> perf_counter
+<span class="hljs-keyword">from</span> typing <span class="hljs-keyword">import</span> Any, Dict, Iterable, Iterator, List, Sequence, Tuple, Union
+</div></code></pre>
+<p>Initialize logging for logging messages.</p>
+<pre class="hljs"><code><div>logging.basicConfig()
+logger = logging.getLogger(__name__)
+</div></code></pre>
+<h2 id="41-utility-functions">4.1. Utility functions</h2>
+<h3 id="411-argsort">4.1.1. argsort</h3>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">argsort</span><span class="hljs-params">(seq: Sequence, *args, **kargs)</span> -&gt; List:</span>
+    <span class="hljs-string">'''Returns the indices that would sort an array.
+
+    Args:
+        seq (Sequence): Sequence to sort.
+
+    Returns:
+        List: List of indices that sort `seq`.
+    '''</span>
+</div></code></pre>
+<p>Sorts the indices using the <code>seq.__getitem__</code> key which effectively produces the indices that would sort an array.</p>
+<pre class="hljs"><code><div>    <span class="hljs-keyword">return</span> sorted(range(len(seq)), key=seq.__getitem__, *args, **kargs)
+</div></code></pre>
+<h3 id="412-normalize-to-sum">4.1.2. normalize to sum</h3>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">normalize_to_sum</span><span class="hljs-params">(iter: Iterable[Union[int, float]])</span> -&gt; List[float]:</span>
+    <span class="hljs-string">'''Returns the scaled `iter` to have a sum of 1.
+
+    Args:
+        iter (Iterable[Union[int, float]]): The iterable to normalize.
+
+    Returns:
+        List[float]: Scaled `iter`
+    '''</span>
+    it1, it2 = itertools.tee(iter)
+</div></code></pre>
+<p>Get the sum and divide each value by the sum.</p>
+<pre class="hljs"><code><div>    total = sum(it1)
+    <span class="hljs-keyword">return</span> [float(i) / total <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> it2]
+</div></code></pre>
+<h3 id="413-split-by-ratio">4.1.3. split by ratio</h3>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">split_by_ratio</span><span class="hljs-params">(seq: Sequence,
+                   weights: Iterable,
+                   min_length: int = <span class="hljs-number">0</span>)</span> -&gt; Iterator[Sequence]:</span>
+    <span class="hljs-string">'''Split `seq` according to `weights`. Tries to satisfy the optional
+    `min_length` argument.
+
+    Args:
+        seq (Sequence): Sequence to split
+        weights (Iterable): Ratio
+        min_length (int, optional): Minimum splice length. Defaults to 0.
+
+    Yields:
+        Iterator[Sequence]: a splice of `seq`
+    '''</span>
+    ratio_norm = normalize_to_sum(weights)
+    ratio_norm_argsort = argsort(ratio_norm)
+
+    seq_len = len(seq)
+    sub_seq_lens = [<span class="hljs-number">0</span>] * len(ratio_norm)
+</div></code></pre>
+<p>Keep track of the remaining allocations left in <code>remaining</code>.</p>
+<pre class="hljs"><code><div>    remaining = seq_len
+</div></code></pre>
+<p>Iterate over the ratios in increasing order. Allocate with minimum length of <code>min_length</code> and maximum length of <code>remaining</code>. Subtract the allocated <code>sub_len</code> from <code>remaining</code>.</p>
+<pre class="hljs"><code><div>    <span class="hljs-keyword">for</span> idx, ratio <span class="hljs-keyword">in</span> zip(ratio_norm_argsort, sorted(ratio_norm)):
+        sub_len = min(max(round(ratio * seq_len), min_length), remaining)
+        remaining -= sub_len
+        sub_seq_lens[idx] = sub_len
+</div></code></pre>
+<p>Calculate the resulting split indices and store it to <code>splits</code>.</p>
+<pre class="hljs"><code><div>    splits = [<span class="hljs-number">0</span>]
+    <span class="hljs-keyword">for</span> sub_len <span class="hljs-keyword">in</span> sub_seq_lens:
+        splits.append(splits[<span class="hljs-number">-1</span>] + sub_len)
+
+    <span class="hljs-keyword">for</span> start, end <span class="hljs-keyword">in</span> zip(splits, splits[<span class="hljs-number">1</span>:]):
+        <span class="hljs-keyword">yield</span> seq[start:end]
+</div></code></pre>
+<h3 id="414-get-average-ping">4.1.4. get average ping</h3>
+<pre class="hljs"><code><div><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_average_ping</span><span class="hljs-params">(host: str, n: int = <span class="hljs-number">3</span>)</span> -&gt; float:</span>
+    <span class="hljs-string">'''Async function to get average ping of `n` echo requests to `host`
+
+    Args:
+        host (str): host
+        n (int, optional): Number of echo requests. Defaults to 3.
+
+    Raises:
+        SubprocessError: OS ping command error
+        RuntimeError: Cannot parse ping command
+
+    Returns:
+        float: Average ping
+    '''</span>
+    number = <span class="hljs-string">r'\d+(?:\.\d+)?'</span>
+</div></code></pre>
+<p>Initialize platform dependent flags and regex patterns.</p>
+<pre class="hljs"><code><div>    <span class="hljs-keyword">if</span> platform.system().lower() == <span class="hljs-string">'windows'</span>:
+        count_flag = <span class="hljs-string">'-n'</span>
+        pattern = <span class="hljs-string">f'Average = (<span class="hljs-subst">{number}</span>)ms'</span>
+    <span class="hljs-keyword">else</span>:
+        count_flag = <span class="hljs-string">'-c'</span>
+        pattern = <span class="hljs-string">f'min/avg/max/mdev = <span class="hljs-subst">{number}</span>/(<span class="hljs-subst">{number}</span>)'</span>
+</div></code></pre>
+<p>Create the ping subprocess. Pipe the stdout.</p>
+<pre class="hljs"><code><div>    proc = <span class="hljs-keyword">await</span> asyncio.create_subprocess_exec(<span class="hljs-string">'ping'</span>,
+                                                count_flag,
+                                                str(n),
+                                                host,
+                                                stdout=asyncio.subprocess.PIPE)
+</div></code></pre>
+<p>Get the output and parse the average ping using regex.</p>
+<pre class="hljs"><code><div>    stdout, stderr = <span class="hljs-keyword">await</span> proc.communicate()
+    <span class="hljs-keyword">if</span> proc.returncode &lt; <span class="hljs-number">0</span>:
+        <span class="hljs-keyword">raise</span> SubprocessError(<span class="hljs-string">'ping command error'</span>)
+    match = re.search(pattern, stdout.decode())
+    <span class="hljs-keyword">if</span> match <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:
+        <span class="hljs-keyword">raise</span> RuntimeError(
+            <span class="hljs-string">f'no match found for pattern <span class="hljs-subst">{pattern}</span> in output\n<span class="hljs-subst">{stdout}</span>'</span>)
+    average = float(match.group(<span class="hljs-number">1</span>))
+    <span class="hljs-keyword">return</span> average
+</div></code></pre>
+<h3 id="415-get-latencies">4.1.5. get latencies</h3>
+<p>Pings the hosts <em>asynchronously</em>.</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_latencies</span><span class="hljs-params">(hosts: Iterable[str])</span> -&gt; List:</span>
+    <span class="hljs-string">'''Returns a list of the round trip times of `hosts`
+
+    Args:
+        hosts (Iterable[str]): Hosts
+
+    Returns:
+        List: List of round trip times
+    '''</span>
+</div></code></pre>
+<p>Create a list of Coroutine objects.</p>
+<pre class="hljs"><code><div>    async_pings = [get_average_ping(host) <span class="hljs-keyword">for</span> host <span class="hljs-keyword">in</span> hosts]
+</div></code></pre>
+<p>Gather the Coroutines into a Future object. Get an async event loop and run the Future and get the return values.</p>
+<pre class="hljs"><code><div>    pings_future = asyncio.gather(*async_pings)
+
+    loop = asyncio.get_event_loop()
+    returns = loop.run_until_complete(pings_future)
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> loop.is_running(): loop.close()
+
+    <span class="hljs-keyword">return</span> returns
+</div></code></pre>
+<h3 id="416-batch-seq">4.1.6. batch seq</h3>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">batch_seq</span><span class="hljs-params">(seq: Sequence, size: int)</span> -&gt; Iterator[Sequence]:</span>
+    <span class="hljs-string">'''Batch a sequence into `size` lenghts
+
+    Args:
+        seq (Sequence): The sequence
+        size (int): Length size
+
+    Returns:
+        Iterator[Sequence]: Batched `seq`
+    '''</span>
+    <span class="hljs-keyword">return</span> (seq[i:i + size] <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(<span class="hljs-number">0</span>, len(seq), size))
+</div></code></pre>
+<h2 id="42-mdalp-abstract-class">4.2. MDALP abstract class</h2>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MDALP</span>:</span>
+</div></code></pre>
+<h3 id="421-init">4.2.1. init</h3>
+<p>Create the socket if not provided. Create a selector and register the socket for read events.</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, addr, sock: socket.socket = None)</span>:</span>
+    <span class="hljs-string">'''
+    Args:
+        addr: IP address of the server
+        sock (socket.socket, optional): Socket to use, creates a new socket object if None. Defaults to None.
+    '''</span>
+    self._sock: socket.socket = sock <span class="hljs-keyword">if</span> sock <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-literal">None</span> <span class="hljs-keyword">else</span> socket.socket(
+        socket.AF_INET, socket.SOCK_DGRAM)
+    self._sock.setblocking(<span class="hljs-literal">False</span>)
+    self._sel = selectors.DefaultSelector()
+    self._sel.register(self._sock, selectors.EVENT_READ)
+    self._addr = addr
+</div></code></pre>
+<h3 id="422-enter">4.2.2. enter</h3>
+<p>Used by Python's context manager.</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__enter__</span><span class="hljs-params">(self)</span>:</span>
+    <span class="hljs-keyword">return</span> self
+</div></code></pre>
+<h3 id="423-close">4.2.3. close</h3>
+<p>Unregeisters the socket and closes the socket.</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">close</span><span class="hljs-params">(self)</span>:</span>
+    <span class="hljs-string">'''Call when done'''</span>
+    self._sel.unregister(self._sock)
+    self._sock.close()
+    logger.info(<span class="hljs-string">f'MDALP: <span class="hljs-subst">{self._addr}</span> closed.'</span>)
+</div></code></pre>
+<h3 id="424-exit">4.2.4. exit</h3>
+<p>Used by Python's context manager. Call close on exit.</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__exit__</span><span class="hljs-params">(self, type, value, traceback)</span>:</span>
+    self.close()
+</div></code></pre>
+<h3 id="425-parse-message">4.2.5. parse message</h3>
+<p>Parses a message into a dictionary using regex pattern matching.</p>
+<pre class="hljs"><code><div><span class="hljs-meta">@staticmethod</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">_parse_message</span><span class="hljs-params">(message: str)</span> -&gt; Dict[str, Any]:</span>
+    <span class="hljs-string">'''Parses a message into a dictionary
+
+    Args:
+        message (str): Message
+
+    Returns:
+        Dict[str, Any]: Parsed info, None if pattern matching failed.
+    '''</span>
+</div></code></pre>
+<p>Add a <code>;</code> at the end for consistency when needed.</p>
+<pre class="hljs"><code><div>    <span class="hljs-keyword">if</span> len(message) &gt; <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> message[<span class="hljs-number">-1</span>] != <span class="hljs-string">';'</span>: message += <span class="hljs-string">';'</span>
+</div></code></pre>
+<p>Produce the regex pattern with the appropriate named capture groups.</p>
+<pre class="hljs"><code><div>    fields = [
+        (<span class="hljs-string">'Type'</span>, <span class="hljs-string">r'\d+'</span>),
+        (<span class="hljs-string">'TID'</span>, <span class="hljs-string">r'\d+'</span>),
+        (<span class="hljs-string">'SEQ'</span>, <span class="hljs-string">r'\d+'</span>),
+        (<span class="hljs-string">'DATA'</span>, <span class="hljs-string">r'.*'</span>)  <span class="hljs-comment"># greedy</span>
+    ]
+    regex = <span class="hljs-string">''</span>.join(<span class="hljs-string">'({0}:(?P&lt;{0}&gt;{1});)?'</span>.format(*field)
+                    <span class="hljs-keyword">for</span> field <span class="hljs-keyword">in</span> fields)
+</div></code></pre>
+<p>Match with the message and get the dictionary of named capture groups and its values.</p>
+<pre class="hljs"><code><div>    match = re.match(regex, message)
+    <span class="hljs-keyword">if</span> match <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>: <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span>
+
+    parsed = match.groupdict()
+</div></code></pre>
+<p>Convert to appropriate types then return the dictionary.</p>
+<pre class="hljs"><code><div>    <span class="hljs-keyword">for</span> field <span class="hljs-keyword">in</span> fields[<span class="hljs-number">0</span>:<span class="hljs-number">3</span>]:
+        name = field[<span class="hljs-number">0</span>]
+        <span class="hljs-keyword">if</span> parsed.get(name) <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-literal">None</span>: parsed[name] = int(parsed[name])
+
+    <span class="hljs-keyword">if</span> parsed.get(<span class="hljs-string">'Type'</span>) == <span class="hljs-number">1</span> <span class="hljs-keyword">and</span> parsed.get(<span class="hljs-string">'DATA'</span>) <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-literal">None</span>:
+        parsed[<span class="hljs-string">'DATA'</span>] = eval(parsed[<span class="hljs-string">'DATA'</span>])
+
+    logger.debug(<span class="hljs-string">f'Parsed data: <span class="hljs-subst">{parsed}</span>'</span>)
+    <span class="hljs-keyword">return</span> parsed
+</div></code></pre>
+<h3 id="426-send-packet">4.2.6. send packet</h3>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">send_packet</span><span class="hljs-params">(self,
+                type: int,
+                tid: int = None,
+                seq: int = None,
+                data: bytes = None)</span> -&gt; int:</span>
+    <span class="hljs-string">'''Send a packet
+
+    Args:
+        type (int): Packet type
+        tid (int, optional): Transaction ID. Defaults to None.
+        seq (int, optional): Sequence number. Defaults to None.
+        data (bytes, optional): Payload. Defaults to None.
+
+    Returns:
+        int: Number of bytes of `data` sent not including header.
+    '''</span>
+</div></code></pre>
+<p>Create the packet header and append the payload (if needed) based on provided arguments.</p>
+<pre class="hljs"><code><div>    header = <span class="hljs-string">f'Type:<span class="hljs-subst">{type}</span>;'</span>
+    <span class="hljs-keyword">if</span> tid <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-literal">None</span>: header += <span class="hljs-string">f'TID:<span class="hljs-subst">{tid}</span>;'</span>
+    <span class="hljs-keyword">if</span> seq <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-literal">None</span>: header += <span class="hljs-string">f'SEQ:<span class="hljs-subst">{seq}</span>;'</span>
+    header = header.encode()
+
+    payload = <span class="hljs-string">b''</span>
+    <span class="hljs-keyword">if</span> data <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-literal">None</span>:
+        header += <span class="hljs-string">b'DATA:'</span>
+        payload = data
+
+    message = header + payload
+</div></code></pre>
+<p>Send the produced message.</p>
+<pre class="hljs"><code><div>    ret = max(<span class="hljs-number">0</span>, self._sock.sendto(message, self._addr) - len(header))
+    logger.debug(<span class="hljs-string">f'client -&gt; <span class="hljs-subst">{self._addr}</span> (return <span class="hljs-subst">{ret}</span>): <span class="hljs-subst">{message}</span>'</span>)
+    <span class="hljs-keyword">return</span> ret
+</div></code></pre>
+<h3 id="427-recv-packet">4.2.7. recv packet</h3>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">recv_packet</span><span class="hljs-params">(self,
+                buf_size: int = <span class="hljs-number">1024</span>,
+                timeout: float = None)</span> -&gt; Dict[str, Any]:</span>
+    <span class="hljs-string">'''Returns parsed message received
+
+    Args:
+        buf_size (int, optional): Buffer size. Defaults to 1024.
+        timeout (float, optional): Timeout in seconds. Defaults to None.
+
+    Returns:
+        Dict[str, Any]: Parsed message.
+    '''</span>
+</div></code></pre>
+<p>Wait for a read event from the selector. Pass the timeout argument.</p>
+<pre class="hljs"><code><div>    events = self._sel.select(timeout)
+    <span class="hljs-keyword">if</span> len(events) == <span class="hljs-number">0</span>:
+        logger.info(<span class="hljs-string">f'Receive timeout!'</span>)
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span>
+</div></code></pre>
+<p>A read is available. Read the data and get the address from where it came from.</p>
+<pre class="hljs"><code><div>    data, addr = self._sock.recvfrom(buf_size)
+</div></code></pre>
+<p>Check if the address and data are correct then parse and return it.</p>
+<pre class="hljs"><code><div>    <span class="hljs-keyword">if</span> addr != self._addr:
+        logger.info(
+            <span class="hljs-string">f'Data received from <span class="hljs-subst">{addr}</span>, expected address is <span class="hljs-subst">{self._addr}</span>.'</span>)
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span>
+
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> data:
+        logger.info(<span class="hljs-string">f'Data received from <span class="hljs-subst">{addr}</span> is empty.'</span>)
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span>
+
+    data = data.decode()
+    parsed = self._parse_message(data)
+    <span class="hljs-keyword">if</span> parsed <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>: logger.warn(<span class="hljs-string">f'Parsed failed with data <span class="hljs-subst">{data}</span>'</span>)
+    <span class="hljs-keyword">return</span> parsed
+</div></code></pre>
+<h3 id="428-recv-packet-from">4.2.8. recv packet from</h3>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">recv_packet_from</span><span class="hljs-params">(self,
+                        buf_size: int = <span class="hljs-number">1024</span>,
+                        timeout: float = None)</span> -&gt; Tuple[Dict[str, Any], Any]:</span>
+    <span class="hljs-string">'''Returns tuple of parsed message and address of sender
+
+    Args:
+        buf_size (int, optional): Buffer size. Defaults to 1024.
+        timeout (float, optional): Timeout in seconds. Defaults to None.
+
+    Returns:
+        Tuple[Dict[str, Any], Any]: Parsed message and address
+    '''</span>
+</div></code></pre>
+<p>Wait for a read event from the selector. Pass the timeout argument.</p>
+<pre class="hljs"><code><div>    events = self._sel.select(timeout)
+    <span class="hljs-keyword">if</span> len(events) == <span class="hljs-number">0</span>:
+        logger.info(<span class="hljs-string">f'Receive timeout!'</span>)
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span>, <span class="hljs-literal">None</span>
+</div></code></pre>
+<p>A read is available. Read the data and get the address from where it came from.</p>
+<pre class="hljs"><code><div>    data, addr = self._sock.recvfrom(buf_size)
+</div></code></pre>
+<p>Check if the data is correct then parse and return it with the address.</p>
+<pre class="hljs"><code><div>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> data:
+        logger.info(<span class="hljs-string">f'Data received from <span class="hljs-subst">{addr}</span> is empty.'</span>)
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span>, <span class="hljs-literal">None</span>
+
+    data = data.decode()
+    parsed = self._parse_message(data)
+    <span class="hljs-keyword">if</span> parsed <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>: logger.warn(<span class="hljs-string">f'Parsed failed with data <span class="hljs-subst">{data}</span>'</span>)
+    <span class="hljs-keyword">return</span> parsed, addr
+</div></code></pre>
+<h2 id="43-mdalprecvclient">4.3. MDALPRecvClient</h2>
+<p>Used to interface with the receiving servers.</p>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MDALPRecvClient</span><span class="hljs-params">(MDALP)</span>:</span>
+<span class="hljs-string">'''Client class for the MDALP receiving server.'''</span>
+</div></code></pre>
+<h3 id="431-init">4.3.1. init</h3>
+<p>Assign a data sequence to be sent to the receiving server and a base sequence number.</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self,
+             addr,
+             sock: socket.socket,
+             tid: int,
+             data_seq: Sequence[bytes],
+             seq_start: int = <span class="hljs-number">0</span>)</span>:</span>
+    <span class="hljs-string">'''
+    Args:
+        addr ([type]): IP address of the server
+        sock (socket.socket): Socket to use
+                              Usually the socket of the   MDALP client
+        tid (int): Transaction ID
+        data_seq (Sequence[bytes]): Data to be sent to the receiving server
+        seq_start (int, optional): Starting sequence number. Defaults to 0.
+    '''</span>
+    super().__init__(addr, sock=sock)
+    self._tid = tid
+    self._last_send = <span class="hljs-literal">None</span>
+    self._seq = tuple(data_seq)
+    self._base = seq_start
+    self._curr_idx = <span class="hljs-number">0</span>
+</div></code></pre>
+<h3 id="432-properties">4.3.2. properties</h3>
+<p>Length of the data assigned.</p>
+<pre class="hljs"><code><div><span class="hljs-meta">@property</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">data_len</span><span class="hljs-params">(self)</span> -&gt; int:</span>
+    <span class="hljs-keyword">return</span> len(self._seq)
+</div></code></pre>
+<p>The minimum sequence number. The base sequence number.</p>
+<pre class="hljs"><code><div><span class="hljs-meta">@property</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">seq_min</span><span class="hljs-params">(self)</span> -&gt; int:</span>
+    <span class="hljs-keyword">return</span> self._base
+</div></code></pre>
+<p>The maximum sequence number.</p>
+<pre class="hljs"><code><div><span class="hljs-meta">@property</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">seq_max</span><span class="hljs-params">(self)</span> -&gt; int:</span>
+    <span class="hljs-keyword">return</span> len(self._seq) + self._base - <span class="hljs-number">1</span>
+</div></code></pre>
+<p>The current sequence number in iteration.</p>
+<pre class="hljs"><code><div><span class="hljs-meta">@property</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">seq_curr</span><span class="hljs-params">(self)</span> -&gt; int:</span>
+    <span class="hljs-keyword">return</span> self._curr_idx + self._base
+</div></code></pre>
+<p>Set the current sequence number. Internally, modifies the current index.</p>
+<pre class="hljs"><code><div><span class="hljs-meta">@seq_curr.setter</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">seq_curr</span><span class="hljs-params">(self, i: int)</span>:</span>
+    self._curr_idx = i - self._base
+</div></code></pre>
+<p>Returns a bool that indicates if iteration is finished.</p>
+<pre class="hljs"><code><div><span class="hljs-meta">@property</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">data_exhausted</span><span class="hljs-params">(self)</span> -&gt; bool:</span>
+    <span class="hljs-keyword">return</span> self._curr_idx &gt;= len(self._seq)
+</div></code></pre>
+<p>Returns the time elapsed in seconds since the last send.</p>
+<pre class="hljs"><code><div><span class="hljs-meta">@property</span>
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">time_since_last_send</span><span class="hljs-params">(self)</span> -&gt; float:</span>
+    <span class="hljs-keyword">return</span> perf_counter() - self._last_send
+</div></code></pre>
+<h3 id="433-reset">4.3.3. reset</h3>
+<p>Resets the iteration.</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">reset</span><span class="hljs-params">(self)</span>:</span>
+    <span class="hljs-string">'''Reset data iteration'''</span>
+    self._curr_idx = <span class="hljs-number">0</span>
+</div></code></pre>
+<h3 id="434-get-curr-data">4.3.4. get curr data</h3>
+<p>Return the current data in iteration if there is any, else returns None.</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_curr_data</span><span class="hljs-params">(self)</span> -&gt; bytes:</span>
+    <span class="hljs-string">'''Returns the current data in iteration
+
+    Returns:
+        bytes: Bytes of data, None if iteration is finished
+    '''</span>
+    <span class="hljs-keyword">return</span> self._seq[self._curr_idx] <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> self.data_exhausted <span class="hljs-keyword">else</span> <span class="hljs-literal">None</span>
+</div></code></pre>
+<h3 id="435-get-next-data">4.3.5. get next data</h3>
+<p>Return the next data in iteration if there is any, else returns None. Increments the index / sequence number.</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_next_data</span><span class="hljs-params">(self)</span> -&gt; bytes:</span>
+    <span class="hljs-string">'''Returns the next data in iteration.
+    Current index/sequence is incremented
+
+    Returns:
+        bytes: Bytes of data, None if iteration is finished
+    '''</span>
+    self._curr_idx = min(self._curr_idx + <span class="hljs-number">1</span>, len(self._seq))
+    <span class="hljs-keyword">if</span> self.data_exhausted: <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span>
+    <span class="hljs-keyword">return</span> self._seq[self._curr_idx]
+</div></code></pre>
+<h3 id="436-send-curr">4.3.6. send curr</h3>
+<p>Send the current data in iteration. If it exists, returns True, else nothing is done and returns False.</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">send_curr</span><span class="hljs-params">(self)</span> -&gt; bool:</span>
+    <span class="hljs-string">'''Sends the current data in iteration
+
+    Returns:
+        bool: Returns True if there was data to send, else False
+    '''</span>
+    data = self.get_curr_data()
+    <span class="hljs-keyword">if</span> data <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>: <span class="hljs-keyword">return</span> <span class="hljs-literal">False</span>
+    self.send_packet(type=<span class="hljs-number">2</span>, tid=self._tid, seq=self.seq_curr, data=data)
+    self._last_send = perf_counter()
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">True</span>
+</div></code></pre>
+<h3 id="437-send-next">4.3.7. send next</h3>
+<p>Send the next data in iteration. If it exists, returns True, else nothing is done and returns False.</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">send_next</span><span class="hljs-params">(self)</span> -&gt; bool:</span>
+    <span class="hljs-string">'''Sends the next data in iteration
+    Current index/sequence is incremented
+
+    Returns:
+        bool: Returns True if there was data to send, else False
+    '''</span>
+    data = self.get_next_data()
+    <span class="hljs-keyword">if</span> data <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>: <span class="hljs-keyword">return</span> <span class="hljs-literal">False</span>
+    self.send_packet(type=<span class="hljs-number">2</span>, tid=self._tid, seq=self.seq_curr, data=data)
+    self._last_send = perf_counter()
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">True</span>
+</div></code></pre>
+<h2 id="44-mdalpclient">4.4. MDALPClient</h2>
+<p>The class that is mainly used. Used to interface with the orchestrator server and instantiates the MDALPRecvClient class to interface with multiple receiving servers too.</p>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MDALPClient</span><span class="hljs-params">(MDALP)</span>:</span>
+    <span class="hljs-string">'''Client class for the MDALP orchestrator server.'''</span>
+    MAX_PAYLOAD = <span class="hljs-number">100</span>
+    RECV_PORT = <span class="hljs-number">4650</span>
+    TIMEOUT = <span class="hljs-number">3</span>
+    TIMEOUT_INTENT = <span class="hljs-number">120</span>
+    MIN_RATIO = <span class="hljs-number">0.1</span>
+</div></code></pre>
+<h3 id="441-send-intent">4.4.1. send intent</h3>
+<p>Sends a type 1 message to the orchestrator server and returns the parsed response.</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">_send_intent</span><span class="hljs-params">(self)</span> -&gt; Dict[str, Any]:</span>
+    <span class="hljs-string">'''Returns the parsed type 1 message after sending the type 0.
+
+    Returns:
+        Dict[str, Any]: Parsed message
+    '''</span>
+    self.send_packet(<span class="hljs-number">0</span>)
+    logger.info(<span class="hljs-string">f'Intent message sent to <span class="hljs-subst">{self._addr}</span>.'</span>)
+    response = <span class="hljs-literal">None</span>
+    <span class="hljs-keyword">while</span> response <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:
+        response = self.recv_packet(timeout=self.TIMEOUT_INTENT)
+
+    <span class="hljs-keyword">if</span> response.get(<span class="hljs-string">'Type'</span>) != <span class="hljs-number">1</span>: <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span>
+    logger.info(<span class="hljs-string">f'Response: <span class="hljs-subst">{response}</span>'</span>)
+    <span class="hljs-keyword">return</span> response
+</div></code></pre>
+<h3 id="442-send-single-server">4.4.2. send single server</h3>
+<p>Used to send data to a single server without load balancing.</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">_send_single_server</span><span class="hljs-params">(self, host: str, tid: int, data: bytes)</span> -&gt; int:</span>
+    <span class="hljs-string">'''Send `data` to `host` with transactio ID `tid`.
+
+    Args:
+        host (str): Host
+        tid (int): Transaction ID
+        data (bytes): Data
+
+    Returns:
+        int: Number of data in bytes sent
+    '''</span>
+</div></code></pre>
+<p>Instantiate an MDALPRecvClient object. Assign all the data to it. Pass a duplicate of own socket.</p>
+<pre class="hljs"><code><div>    addr = (host, self.RECV_PORT)
+    server = MDALPRecvClient(addr, self._sock.dup(), tid,
+                                batch_seq(data, self.MAX_PAYLOAD))
+</div></code></pre>
+<p>Send the first packet.</p>
+<pre class="hljs"><code><div>    ret = <span class="hljs-number">0</span>
+    server.send_curr()
+</div></code></pre>
+<p>While not all data is sent, wait for a response with a timeout of <code>self.TIMEOUT</code>.</p>
+<pre class="hljs"><code><div>    <span class="hljs-keyword">while</span> <span class="hljs-keyword">not</span> server.data_exhausted:
+        response = server.recv_packet(timeout=self.TIMEOUT)
+</div></code></pre>
+<p>On timeout, resend the current data.</p>
+<pre class="hljs"><code><div>        <span class="hljs-keyword">if</span> response <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>:
+            server.send_curr()
+            <span class="hljs-keyword">continue</span>
+</div></code></pre>
+<p>If the response message is not as expected, resend the current data.</p>
+<pre class="hljs"><code><div>        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> all((response.get(<span class="hljs-string">'Type'</span>) == <span class="hljs-number">3</span>, response.get(<span class="hljs-string">'TID'</span>)
+                    == tid, response.get(<span class="hljs-string">'SEQ'</span>) == server.seq_curr)):
+            server.send_curr()
+            <span class="hljs-keyword">continue</span>
+</div></code></pre>
+<p>The data sent is successfully acknowledged. Add the number of data bytes sent. Send the next data.</p>
+<pre class="hljs"><code><div>        ret += len(server.get_curr_data())
+        server.send_next()
+</div></code></pre>
+<p>Return the number of data bytes sent.</p>
+<pre class="hljs"><code><div>    <span class="hljs-keyword">return</span> ret
+</div></code></pre>
+<h3 id="443-send-load-balance">4.4.3. send load balance</h3>
+<p>Send data with load balancing.</p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">_send_load_balance</span><span class="hljs-params">(self, hosts: Iterable[str], tid: int,
+                        data: bytes)</span> -&gt; int:</span>
+    <span class="hljs-string">'''Send `data` to `hosts` with transactio ID `tid`.
+    Load balances using the inverse of round trip times
+
+    Args:
+        hosts (Iterable[str]): Hosts
+        tid (int): Transaction ID
+        data (bytes): Data
+
+    Returns:
+        int: Number of data in bytes sent
+    '''</span>
+    hosts = list(hosts)
+</div></code></pre>
+<p>Get the latencies of the hosts. Split the data by the inverse of the latencies. This way, more data is allocated for receiving servers with lower latencies.</p>
+<pre class="hljs"><code><div>    <span class="hljs-comment"># get round trip times</span>
+    latencies = get_latencies(hosts)
+    <span class="hljs-comment"># split by inverse of RTTs</span>
+    split_data = split_by_ratio(data, (<span class="hljs-number">1</span> / l <span class="hljs-keyword">for</span> l <span class="hljs-keyword">in</span> latencies),
+                                math.ceil(self.MIN_RATIO * len(data)))
+</div></code></pre>
+<p>Instantiate the MDALPRecvClient objects with the correct data assignment and base sequence numbers.</p>
+<pre class="hljs"><code><div>    recv_servers: List[MDALPRecvClient] = []
+    seq_base = <span class="hljs-number">0</span>
+    <span class="hljs-keyword">for</span> host, d <span class="hljs-keyword">in</span> zip(hosts, split_data):
+        addr = (host, self.RECV_PORT)
+        recv_servers.append(
+            MDALPRecvClient(addr, self._sock.dup(), tid,
+                            batch_seq(d, self.MAX_PAYLOAD), seq_base))
+        seq_base += recv_servers[<span class="hljs-number">-1</span>].data_len
+</div></code></pre>
+<p>Output the summary.</p>
+<pre class="hljs"><code><div>    <span class="hljs-comment"># summary</span>
+    <span class="hljs-keyword">for</span> server, latency <span class="hljs-keyword">in</span> zip(recv_servers, latencies):
+        logger.info(
+            <span class="hljs-string">f'addr: <span class="hljs-subst">{server._addr}</span>, latency: <span class="hljs-subst">{latency}</span>, data_len: <span class="hljs-subst">{server.data_len}</span>'</span>
+        )
+</div></code></pre>
+<p>Send the first packet of each receiving server.</p>
+<pre class="hljs"><code><div>    ret = <span class="hljs-number">0</span>
+    <span class="hljs-comment"># initial send</span>
+    <span class="hljs-keyword">for</span> server <span class="hljs-keyword">in</span> recv_servers:
+        server.send_curr()
+</div></code></pre>
+<p>Loop while not all of the data is sent.</p>
+<pre class="hljs"><code><div>    <span class="hljs-comment"># send the rest</span>
+    <span class="hljs-keyword">while</span> any(map(<span class="hljs-keyword">lambda</span> s: <span class="hljs-keyword">not</span> s.data_exhausted, recv_servers)):
+</div></code></pre>
+<p>Check for time elapsed since last send for each server, resend the current data for each server that reached timeout.</p>
+<pre class="hljs"><code><div>        <span class="hljs-comment"># check server timeouts</span>
+        <span class="hljs-keyword">for</span> server <span class="hljs-keyword">in</span> recv_servers:
+            <span class="hljs-keyword">if</span> server.data_exhausted: <span class="hljs-keyword">continue</span>
+            <span class="hljs-keyword">if</span> server.time_since_last_send &gt;= self.TIMEOUT:
+                logger.info(
+                    <span class="hljs-string">f'Timeout! <span class="hljs-subst">{server._addr}</span> | seq: <span class="hljs-subst">{server.seq_curr}</span>'</span>)
+                server.send_curr()
+</div></code></pre>
+<p>Wait for a maximum of <code>self.TIMEOUT</code> to receive a packet. If no packet is received, <code>continue</code>.</p>
+<pre class="hljs"><code><div>        response, addr_from = self.recv_packet_from(timeout=self.TIMEOUT)
+        <span class="hljs-keyword">if</span> response <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>: <span class="hljs-keyword">continue</span>
+</div></code></pre>
+<p>Check the received packet and identify the receiving server that acknowledged. If not found, <code>continue</code>.</p>
+<pre class="hljs"><code><div>        <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> (response.get(<span class="hljs-string">'Type'</span>) == <span class="hljs-number">3</span> <span class="hljs-keyword">and</span> response.get(<span class="hljs-string">'TID'</span>) == tid):
+            <span class="hljs-keyword">continue</span>
+
+        server = next((s <span class="hljs-keyword">for</span> s <span class="hljs-keyword">in</span> recv_servers <span class="hljs-keyword">if</span> s._addr == addr_from),
+                        <span class="hljs-literal">None</span>)
+        <span class="hljs-keyword">if</span> server <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>: <span class="hljs-keyword">continue</span>
+</div></code></pre>
+<p>Update the sequence number if needed.</p>
+<pre class="hljs"><code><div>        <span class="hljs-keyword">if</span> response.get(<span class="hljs-string">'SEQ'</span>) != server.seq_curr:
+            <span class="hljs-comment"># not expected acknowledgement sequence number</span>
+            new_seq = response.get(<span class="hljs-string">'SEQ'</span>) + <span class="hljs-number">1</span>
+            <span class="hljs-keyword">if</span> server.seq_min &lt;= new_seq &lt;= server.seq_max:
+                logger.info(
+                    <span class="hljs-string">f'Server <span class="hljs-subst">{server._addr}</span>: Seq number mismatch. Updating seq_curr to <span class="hljs-subst">{new_seq}</span> from <span class="hljs-subst">{server.seq_curr}</span>.'</span>
+                )
+                server.seq_curr = new_seq
+</div></code></pre>
+<p>All checks to the received packet passed. The receiving server acknowledged as expected. Send the next data.</p>
+<pre class="hljs"><code><div>        <span class="hljs-comment"># server acknowledged as expected</span>
+        ret += len(server.get_curr_data())
+        server.send_next()
+</div></code></pre>
+<p>Close the socket used for each receiving server and return the number of data bytes sent.</p>
+<pre class="hljs"><code><div>    <span class="hljs-keyword">for</span> s <span class="hljs-keyword">in</span> recv_servers:
+        s.close()
+
+    <span class="hljs-keyword">return</span> ret
+</div></code></pre>
+<h3 id="444-send">4.4.4. send</h3>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">send</span><span class="hljs-params">(self,
+            data: bytes,
+            load_balance: bool = True,
+            nth_server: int = <span class="hljs-number">1</span>)</span> -&gt; int:</span>
+    <span class="hljs-string">'''Send data.
+
+    Args:
+        data (bytes): Data to send
+        load_balance (bool, optional): Flag if load balancing should be used. Defaults to True.
+        nth_server (int, optional): The 1-indexed server number to use. Defaults to 1.
+
+    Returns:
+        int: Number of data in bytes sent
+    '''</span>
+</div></code></pre>
+<p>Send intent message to orchestrator server. Get the transaction ID and produce the list of receiving servers.</p>
+<pre class="hljs"><code><div>    response = self._send_intent()
+    <span class="hljs-keyword">if</span> response <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>: <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>
+
+    tid = response.get(<span class="hljs-string">'TID'</span>)
+    <span class="hljs-keyword">if</span> tid <span class="hljs-keyword">is</span> <span class="hljs-literal">None</span>: <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>
+
+    hosts = [server.get(<span class="hljs-string">'ip_address'</span>) <span class="hljs-keyword">for</span> server <span class="hljs-keyword">in</span> response.get(<span class="hljs-string">'DATA'</span>)]
+    <span class="hljs-keyword">if</span> len(hosts) == <span class="hljs-number">0</span>: <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>
+</div></code></pre>
+<p>Send the data and return the number of bytes sent. Take the performance in terms of elapsed time and log it.</p>
+<pre class="hljs"><code><div>    start = perf_counter()
+    ret = <span class="hljs-number">0</span>
+    <span class="hljs-keyword">if</span> load_balance:
+        ret = self._send_load_balance(hosts, tid, data)
+    <span class="hljs-keyword">else</span>:
+        ret = self._send_single_server(hosts[nth_server - <span class="hljs-number">1</span>], tid, data)
+    end = perf_counter()
+
+    logger.info(<span class="hljs-string">f'Send took <span class="hljs-subst">{end - start}</span>s.'</span>)
+    <span class="hljs-keyword">return</span> ret
+</div></code></pre>
+<h2 id="45-main">4.5. main</h2>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span><span class="hljs-params">(args)</span>:</span>
+</div></code></pre>
+<p>Set logging level based on command-line argument.</p>
+<pre class="hljs"><code><div>    <span class="hljs-keyword">if</span> args.verbose == <span class="hljs-number">1</span>:
+        logger.setLevel(logging.INFO)
+    <span class="hljs-keyword">elif</span> args.verbose &gt;= <span class="hljs-number">2</span>:
+        logger.setLevel(logging.DEBUG)
+    <span class="hljs-keyword">else</span>:
+        logger.setLevel(logging.WARNING)
+
+    logger.info(<span class="hljs-string">f'Parsed args: <span class="hljs-subst">{args}</span>'</span>)
+</div></code></pre>
+<p>Send the data. Use a context manager using the <code>with</code> and <code>as</code> keywords.</p>
+<pre class="hljs"><code><div>    <span class="hljs-keyword">with</span> MDALPClient((args.addr, args.port)) <span class="hljs-keyword">as</span> client:
+        data = args.file.read().encode()
+        <span class="hljs-keyword">if</span> args.mode == <span class="hljs-number">1</span>:
+            ret = client.send(data)
+        <span class="hljs-keyword">else</span>:
+            ret = client.send(data, load_balance=<span class="hljs-literal">False</span>, nth_server=args.server)
+        logger.debug(<span class="hljs-string">f'return: <span class="hljs-subst">{ret}</span> | data length: <span class="hljs-subst">{len(data)}</span>'</span>)
+</div></code></pre>
+<h3 id="451-command-line-parsing">4.5.1. command-line parsing</h3>
+<p>Create a parser based on the project specifications.</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">'__main__'</span>:
+    parser = argparse.ArgumentParser(
+        description=
+        <span class="hljs-string">'Send text files using  multidestination application-layer protocol (MDALP)'</span>,
+        add_help=<span class="hljs-literal">False</span>)
+
+    required = parser.add_argument_group(title=<span class="hljs-string">'required arguments'</span>)
+    optional = parser.add_argument_group(title=<span class="hljs-string">'optional arguments'</span>)
+
+    required.add_argument(<span class="hljs-string">'-a'</span>,
+                          <span class="hljs-string">'--addr'</span>,
+                          required=<span class="hljs-literal">True</span>,
+                          help=<span class="hljs-string">'IPv4 address of the server'</span>)
+    required.add_argument(<span class="hljs-string">'-p'</span>,
+                          <span class="hljs-string">'--port'</span>,
+                          required=<span class="hljs-literal">True</span>,
+                          type=int,
+                          help=<span class="hljs-string">'UDP port of the server'</span>)
+    required.add_argument(<span class="hljs-string">'-f'</span>,
+                          <span class="hljs-string">'--file'</span>,
+                          type=argparse.FileType(mode=<span class="hljs-string">'r'</span>, encoding=<span class="hljs-string">'UTF-8'</span>),
+                          required=<span class="hljs-literal">True</span>,
+                          help=<span class="hljs-string">'filename of the payload'</span>)
+
+    optional.add_argument(<span class="hljs-string">'-h'</span>,
+                          <span class="hljs-string">'--help'</span>,
+                          action=<span class="hljs-string">'help'</span>,
+                          default=argparse.SUPPRESS,
+                          help=<span class="hljs-string">'show this help message and exit'</span>)
+    optional.add_argument(<span class="hljs-string">'-v'</span>, <span class="hljs-string">'--verbose'</span>, action=<span class="hljs-string">"count"</span>, default=<span class="hljs-number">0</span>)
+    optional.add_argument(
+        <span class="hljs-string">'-m'</span>,
+        <span class="hljs-string">'--mode'</span>,
+        default=<span class="hljs-number">1</span>,
+        type=int,
+        choices=[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>],
+        help=<span class="hljs-string">'mode of the load balancing {1=load balance, 2=no load balancing}'</span>
+    )
+    optional.add_argument(
+        <span class="hljs-string">'-s'</span>,
+        <span class="hljs-string">'--server'</span>,
+        default=<span class="hljs-number">1</span>,
+        type=int,
+        help=<span class="hljs-string">'index of the server to use when no load balancing mode is used'</span>)
+
+    args = parser.parse_args()
+
+    main(args)
+</div></code></pre>
+<h1 id="5-load-balancing-vs-non-load-balancing">5. Load balancing vs Non load balancing</h1>
+<p>Just from the concept and the code, we could infer that load balancing should be able to send a payload faster. Here, we look at a specific case, observing the logs and tracefiles.</p>
+<h2 id="51-load-balancing">5.1. Load balancing</h2>
+<p>We look at a specific transaction with load balancing with <code>TID=3740</code>. Observe that the transaction completed.</p>
+<p><img src="logs/load_balance.png" alt=""></p>
+<p>The following shows the <code>DEBUG</code> level logs from the MDALP client. The command used to send this is</p>
+<pre class="hljs"><code><div>python3 mdalp.py -a 18.139.29.142 -p 4650 -f large_payload -vv
+</div></code></pre>
+<p>The client parses the command-line arguments.</p>
+<pre class="hljs"><code><div>INFO:__main__:Parsed args: Namespace(addr='18.139.29.142', file=&lt;_io.TextIOWrapper name='large_payload' mode='r' encoding='UTF-8'&gt;, mode=1, port=4650, server=1, verbose=2)
+</div></code></pre>
+<p>The intent message is sent to the orchestrator server (<code>18.139.29.142</code>) and its response is parsed.</p>
+<pre class="hljs"><code><div>DEBUG:__main__:client -&gt; ('18.139.29.142', 4650) (return 0): b'Type:0;'
+INFO:__main__:Intent message sent to ('18.139.29.142', 4650).
+DEBUG:__main__:Parsed data: {'Type': 1, 'TID': 3740, 'SEQ': None, 'DATA': [{'ip_address': '177.71.168.45', 'name': '5th Receiver'}, {'ip_address': '54.200.52.112', 'name': '4th Receiver'}, {'ip_address': '18.134.193.153', 'name': '2nd Receiver'}]}
+INFO:__main__:Response: {'Type': 1, 'TID': 3740, 'SEQ': None, 'DATA': [{'ip_address': '177.71.168.45', 'name': '5th Receiver'}, {'ip_address': '54.200.52.112', 'name': '4th Receiver'}, {'ip_address': '18.134.193.153', 'name': '2nd Receiver'}]}
+</div></code></pre>
+<p>From here, denote that <code>server A = 177.71.168.45</code>, <code>server B = 54.200.52.112</code>, and <code>server C = 18.134.193.153</code>.</p>
+<p><em>Note that the start of the send is when the client receives the <code>Type 1</code> message. This is because there is a queue in the orchestrator server and this transaction is processed once a <code>Type 1</code> message is sent.</em></p>
+<p>The receiving servers are pinged asynchronously. Looking at the packet capture, we see this as the client sending ICMP Echo requests to the receiving servers (<code>packets 214 - 216</code>) and the receiving servers replying ICMP Echo replies (<code>packets 217 - 219</code>). This is done three times and the average is taken as the latency.</p>
+<p><img src="screen captures/ping.png" alt=""></p>
+<p>Observe that the length of data assigned to each server is based on the inverse of latency. <code>Server C</code>, the lowest latency server, got the most data assigned to it with a length of <code>21</code>.</p>
+<pre class="hljs"><code><div>INFO:__main__:addr: ('177.71.168.45', 4650), latency: 335.148, data_len: 10
+INFO:__main__:addr: ('54.200.52.112', 4650), latency: 162.844, data_len: 20
+INFO:__main__:addr: ('18.134.193.153', 4650), latency: 156.857, data_len: 21
+</div></code></pre>
+<p>The first packet for each server is sent. Observe the correct sequence numbers of <code>0</code>, <code>0 + 10 = 10</code>, and <code>10 + 20 = 30</code>.</p>
+<pre class="hljs"><code><div>DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3740;SEQ:0;DATA:Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra quis risus sed luctus. Aliq'
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3740;SEQ:10;DATA:r turpis id imperdiet mattis. Nulla eu metus in velit lobortis efficitur. Duis pulvinar risus eget d'
+DEBUG:__main__:client -&gt; ('18.134.193.153', 4650) (return 100): b'Type:2;TID:3740;SEQ:30;DATA: eget pellentesque nulla placerat. Ut non tincidunt tortor, a fringilla ligula. Ut eu purus eget tor'
+</div></code></pre>
+<p>In the packet capture, we can easily see the corresponding packets.Observe that <code>packet 236</code> corresponds to the packet sent to <code>Server C</code> with <code>SEQ = 30</code>.</p>
+<p><img src="screen captures/lb1.png" alt=""></p>
+<p>Once the receiving server acknowledges a packet successfully, the next packet is sent. If a timeout occurs, the current packet is resent.</p>
+<pre class="hljs"><code><div>DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 30, 'DATA': None}
+DEBUG:__main__:client -&gt; ('18.134.193.153', 4650) (return 100): b'Type:2;TID:3740;SEQ:31;DATA:tor tempor volutpat. Sed sed urna non mauris tempor tempor. Sed accumsan, mauris nec efficitur fauci'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 0, 'DATA': None}
+DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3740;SEQ:1;DATA:uam erat volutpat. Aliquam eget massa non dolor finibus pulvinar id vitae metus. Praesent pellentesq'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 31, 'DATA': None}
+DEBUG:__main__:client -&gt; ('18.134.193.153', 4650) (return 100): b'Type:2;TID:3740;SEQ:32;DATA:bus, orci massa dignissim nunc, eu suscipit lorem libero eu turpis. Quisque non est vitae turpis eff'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 32, 'DATA': None}
+DEBUG:__main__:client -&gt; ('18.134.193.153', 4650) (return 100): b'Type:2;TID:3740;SEQ:33;DATA:icitur placerat vel et augue. Sed vitae dolor leo. Praesent vestibulum faucibus nisi, non finibus lo'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 1, 'DATA': None}
+DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3740;SEQ:2;DATA:ue nulla at elit consectetur sollicitudin. Fusce velit enim, cursus fringilla ante id, sollicitudin '
+</div></code></pre>
+<p><code>Server B</code> experienced a timeout with <code>SEQ = 10</code>. Thus, this packet is sent again. The rest of the logs are provided for completeness.</p>
+<pre class="hljs"><code><div>INFO:__main__:Timeout! ('54.200.52.112', 4650) | seq: 10
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3740;SEQ:10;DATA:r turpis id imperdiet mattis. Nulla eu metus in velit lobortis efficitur. Duis pulvinar risus eget d'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 33, 'DATA': None}
+DEBUG:__main__:client -&gt; ('18.134.193.153', 4650) (return 100): b'Type:2;TID:3740;SEQ:34;DATA:rem mattis in. Praesent pulvinar venenatis felis, vitae tincidunt nunc posuere a. Vestibulum et enim'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 10, 'DATA': None}
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3740;SEQ:11;DATA:ictum convallis. Nullam eros turpis, scelerisque sed dui sit amet, dignissim tristique enim. Duis co'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 34, 'DATA': None}
+DEBUG:__main__:client -&gt; ('18.134.193.153', 4650) (return 100): b'Type:2;TID:3740;SEQ:35;DATA: elementum, viverra tellus ut, sodales erat. Suspendisse maximus est eros, vitae tincidunt erat cons'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 11, 'DATA': None}
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3740;SEQ:12;DATA:ndimentum arcu non sollicitudin fringilla. Quisque feugiat tempor viverra. Proin pulvinar feugiat ur'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 35, 'DATA': None}
+DEBUG:__main__:client -&gt; ('18.134.193.153', 4650) (return 100): b'Type:2;TID:3740;SEQ:36;DATA:equat a. Cras felis felis, vulputate eu rhoncus eget, ornare et justo. Morbi quis porta dui, a scele'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 2, 'DATA': None}
+DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3740;SEQ:3;DATA:gravida odio. Fusce sem neque, consequat vel fermentum vel, placerat vitae lectus. Aliquam porttitor'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 12, 'DATA': None}
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3740;SEQ:13;DATA:na non vestibulum. Donec sed vehicula libero. Ut condimentum nulla eu mi bibendum lacinia. Curabitur'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 36, 'DATA': None}
+DEBUG:__main__:client -&gt; ('18.134.193.153', 4650) (return 100): b'Type:2;TID:3740;SEQ:37;DATA:risque velit. Cras sed malesuada elit. Pellentesque maximus, nulla vitae vehicula vehicula, dui tort'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 13, 'DATA': None}
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3740;SEQ:14;DATA: mattis velit metus, at rhoncus ligula laoreet vitae. Quisque consequat molestie mattis. In hac habi'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 3, 'DATA': None}
+DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3740;SEQ:4;DATA: ex metus, sit amet malesuada arcu ultricies eu. Etiam pulvinar rutrum risus quis volutpat. Sed eget'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 37, 'DATA': None}
+DEBUG:__main__:client -&gt; ('18.134.193.153', 4650) (return 100): b'Type:2;TID:3740;SEQ:38;DATA:or mattis ligula, nec malesuada turpis sapien varius nulla. Quisque vitae massa nec leo congue ullam'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 14, 'DATA': None}
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3740;SEQ:15;DATA:tasse platea dictumst. Fusce aliquet, felis ut molestie mollis, metus elit mollis ante, quis digniss'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 38, 'DATA': None}
+DEBUG:__main__:client -&gt; ('18.134.193.153', 4650) (return 100): b'Type:2;TID:3740;SEQ:39;DATA:corper vel pretium lectus. Maecenas a leo lectus. Praesent vehicula lacinia lectus, vel venenatis ni'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 15, 'DATA': None}
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3740;SEQ:16;DATA:im lacus turpis a libero. In hac habitasse platea dictumst. Quisque suscipit nunc in urna porta grav'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 4, 'DATA': None}
+DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3740;SEQ:5;DATA: magna suscipit, ultrices elit quis, accumsan tortor. Nam elementum augue nec quam vestibulum faucib'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 39, 'DATA': None}
+DEBUG:__main__:client -&gt; ('18.134.193.153', 4650) (return 100): b'Type:2;TID:3740;SEQ:40;DATA:sl aliquam id. Aliquam erat volutpat. Fusce mollis vel libero a dignissim. Praesent condimentum aliq'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 16, 'DATA': None}
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3740;SEQ:17;DATA:ida. Nullam auctor lorem quis lorem volutpat, a semper nisl semper. Pellentesque finibus tempor ultr'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 40, 'DATA': None}
+DEBUG:__main__:client -&gt; ('18.134.193.153', 4650) (return 100): b'Type:2;TID:3740;SEQ:41;DATA:uet finibus. Nam et elit lorem. Praesent sit amet dolor non velit blandit placerat. Aliquam vitae li'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 5, 'DATA': None}
+DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3740;SEQ:6;DATA:us. Sed sed accumsan augue. Sed dignissim orci a mauris auctor feugiat. Morbi convallis sem at neque'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 17, 'DATA': None}
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3740;SEQ:18;DATA:ices. Duis ut lorem et augue blandit posuere non a enim. Nulla facilisi. Nam tristique orci tellus, '
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 41, 'DATA': None}
+DEBUG:__main__:client -&gt; ('18.134.193.153', 4650) (return 100): b'Type:2;TID:3740;SEQ:42;DATA:gula orci. Interdum et malesuada fames ac ante ipsum primis in faucibus. Quisque tincidunt dapibus t'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 18, 'DATA': None}
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3740;SEQ:19;DATA:eget dictum augue sodales id. Nunc rutrum sodales tortor, ut tincidunt risus elementum vitae. Sed eg'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 42, 'DATA': None}
+DEBUG:__main__:client -&gt; ('18.134.193.153', 4650) (return 100): b'Type:2;TID:3740;SEQ:43;DATA:ellus eu euismod. Ut ac dui sit amet tortor mattis congue at at nisl. Sed a mi vitae erat rutrum int'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 6, 'DATA': None}
+DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3740;SEQ:7;DATA: dictum, eget faucibus leo sodales. Pellentesque ultrices felis at vehicula porttitor. Nunc laoreet '
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 43, 'DATA': None}
+DEBUG:__main__:client -&gt; ('18.134.193.153', 4650) (return 100): b'Type:2;TID:3740;SEQ:44;DATA:erdum eu sed lorem. Pellentesque eu condimentum sapien. Duis gravida augue nisl, quis lobortis nisl '
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 19, 'DATA': None}
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3740;SEQ:20;DATA:estas est dui, ac ultricies eros vehicula vel. Sed tincidunt in quam nec dictum. Lorem ipsum dolor s'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 44, 'DATA': None}
+DEBUG:__main__:client -&gt; ('18.134.193.153', 4650) (return 100): b'Type:2;TID:3740;SEQ:45;DATA:efficitur ut. Phasellus interdum tellus vitae leo posuere, non laoreet mi tincidunt. Nullam justo ne'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 20, 'DATA': None}
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3740;SEQ:21;DATA:it amet, consectetur adipiscing elit. Etiam varius urna vel neque congue, eu pharetra lorem lobortis'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 45, 'DATA': None}
+DEBUG:__main__:client -&gt; ('18.134.193.153', 4650) (return 100): b'Type:2;TID:3740;SEQ:46;DATA:que, congue sed elit eleifend, eleifend aliquet eros. Sed tempor faucibus nisi sed ultrices. Integer'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 21, 'DATA': None}
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3740;SEQ:22;DATA:. Duis venenatis diam consectetur orci sollicitudin, ut sodales mauris ullamcorper. Pellentesque qui'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 22, 'DATA': None}
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3740;SEQ:23;DATA:s metus quis nunc fringilla maximus non at nisl. In hendrerit ligula a est rhoncus scelerisque. Aene'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 23, 'DATA': None}
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3740;SEQ:24;DATA:an id risus eget est tristique vehicula ac vel lectus. Ut sollicitudin nisi at ultricies volutpat. A'
+INFO:__main__:Timeout! ('177.71.168.45', 4650) | seq: 7
+DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3740;SEQ:7;DATA: dictum, eget faucibus leo sodales. Pellentesque ultrices felis at vehicula porttitor. Nunc laoreet '
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 24, 'DATA': None}
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3740;SEQ:25;DATA:liquam magna diam, molestie eget nulla ut, commodo euismod tellus. Donec rhoncus est dui, fermentum '
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 7, 'DATA': None}
+DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3740;SEQ:8;DATA:iaculis tempor. Nullam nec egestas quam. Sed cursus magna a sem lacinia mattis. Mauris augue sem, fa'
+INFO:__main__:Timeout! ('18.134.193.153', 4650) | seq: 46
+DEBUG:__main__:client -&gt; ('18.134.193.153', 4650) (return 100): b'Type:2;TID:3740;SEQ:46;DATA:que, congue sed elit eleifend, eleifend aliquet eros. Sed tempor faucibus nisi sed ultrices. Integer'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 25, 'DATA': None}
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3740;SEQ:26;DATA:porttitor nisi maximus quis. Sed a consectetur dui. Nam ut mollis mi, in porta ligula. Cras cursus u'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 46, 'DATA': None}
+DEBUG:__main__:client -&gt; ('18.134.193.153', 4650) (return 100): b'Type:2;TID:3740;SEQ:47;DATA: dictum, nunc nec volutpat hendrerit, ligula eros bibendum nibh, vitae malesuada risus ligula faucib'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 26, 'DATA': None}
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3740;SEQ:27;DATA:ltrices dolor vitae auctor. Aliquam viverra tortor at feugiat vestibulum. Integer rhoncus sed felis '
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 47, 'DATA': None}
+DEBUG:__main__:client -&gt; ('18.134.193.153', 4650) (return 100): b'Type:2;TID:3740;SEQ:48;DATA:us turpis. Curabitur ultricies ut metus vitae malesuada. Mauris imperdiet mauris ac eros bibendum, u'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 27, 'DATA': None}
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3740;SEQ:28;DATA:sit amet cursus. Praesent efficitur sed lectus eu ultrices. Cras faucibus enim et tincidunt viverra.'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 28, 'DATA': None}
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 81): b'Type:2;TID:3740;SEQ:29;DATA: Nullam quis porta dui, eget aliquet enim. Cras laoreet lectus vel ligula varius,'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 48, 'DATA': None}
+DEBUG:__main__:client -&gt; ('18.134.193.153', 4650) (return 100): b'Type:2;TID:3740;SEQ:49;DATA:t facilisis enim iaculis. Sed cursus nisi vel lorem aliquam fermentum. Etiam luctus aliquam tincidun'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 29, 'DATA': None}
+INFO:__main__:Timeout! ('177.71.168.45', 4650) | seq: 8
+DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3740;SEQ:8;DATA:iaculis tempor. Nullam nec egestas quam. Sed cursus magna a sem lacinia mattis. Mauris augue sem, fa'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 49, 'DATA': None}
+DEBUG:__main__:client -&gt; ('18.134.193.153', 4650) (return 56): b'Type:2;TID:3740;SEQ:50;DATA:t. Maecenas quis varius massa. Nunc ornare ac dui sit a.'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 50, 'DATA': None}
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 8, 'DATA': None}
+DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 63): b'Type:2;TID:3740;SEQ:9;DATA:ucibus eget dui at, efficitur efficitur mauris. Phasellus tempo'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3740, 'SEQ': 9, 'DATA': None}
+INFO:__main__:MDALP: ('177.71.168.45', 4650) closed.
+INFO:__main__:MDALP: ('54.200.52.112', 4650) closed.
+INFO:__main__:MDALP: ('18.134.193.153', 4650) closed.
+</div></code></pre>
+<p>Finally, all packets are sent. From the time before pinging the receiving servers up to all the packets being acknowledged, it took <code>26.246762644s</code>.</p>
+<pre class="hljs"><code><div>INFO:__main__:Send took 26.246762644s.
+DEBUG:__main__:return: 5000 | data length: 5000
+INFO:__main__:MDALP: ('18.139.29.142', 4650) closed.
+</div></code></pre>
+<h2 id="52-non-load-balancing">5.2. Non load balancing</h2>
+<p>We take a quick look at how non load balancing performs. Note that in non load balancing, pinging the receiving servers are not done at all to save on time. But the latencies should be very similar to what we had earlier. To recall,</p>
+<pre class="hljs"><code><div>INFO:__main__:addr: ('177.71.168.45', 4650), latency: 335.148, data_len: 10
+INFO:__main__:addr: ('54.200.52.112', 4650), latency: 162.844, data_len: 20
+INFO:__main__:addr: ('18.134.193.153', 4650), latency: 156.857, data_len: 21
+</div></code></pre>
+<h3 id="server-a">Server A</h3>
+<p><img src="logs/a.png" alt=""></p>
+<p>This receiving server had the highest latency. When sending data to it, it failed to acknowledge all the data. Note that the log here is shortened for conciseness.</p>
+<pre class="hljs"><code><div>python3 mdalp.py -a 18.139.29.142 -p 4650 -f large_payload -vv -m 2 -s 1
+INFO:__main__:Parsed args: Namespace(addr='18.139.29.142', file=&lt;_io.TextIOWrapper name='large_payload' mode='r' encoding='UTF-8'&gt;, mode=2, port=4650, server=1, verbose=2)
+DEBUG:__main__:client -&gt; ('18.139.29.142', 4650) (return 0): b'Type:0;'
+INFO:__main__:Intent message sent to ('18.139.29.142', 4650).
+DEBUG:__main__:Parsed data: {'Type': 1, 'TID': 3755, 'SEQ': None, 'DATA': [{'ip_address': '177.71.168.45', 'name': '5th Receiver'}, {'ip_address': '54.200.52.112', 'name': '4th Receiver'}, {'ip_address': '18.134.193.153', 'name': '2nd Receiver'}]}
+INFO:__main__:Response: {'Type': 1, 'TID': 3755, 'SEQ': None, 'DATA': [{'ip_address': '177.71.168.45', 'name': '5th Receiver'}, {'ip_address': '54.200.52.112', 'name': '4th Receiver'}, {'ip_address': '18.134.193.153', 'name': '2nd Receiver'}]}
+DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:0;DATA:Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra quis risus sed luctus. Aliq'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 0, 'DATA': None}
+DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:1;DATA:uam erat volutpat. Aliquam eget massa non dolor finibus pulvinar id vitae metus. Praesent pellentesq'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 1, 'DATA': None}
+DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:2;DATA:ue nulla at elit consectetur sollicitudin. Fusce velit enim, cursus fringilla ante id, sollicitudin '
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 2, 'DATA': None}
+DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:3;DATA:gravida odio. Fusce sem neque, consequat vel fermentum vel, placerat vitae lectus. Aliquam porttitor'
+...
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 38, 'DATA': None}
+DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:39;DATA:nt vehicula lacinia lectus, vel venenatis nisl aliquam id. Aliquam erat volutpat. Fusce mollis vel l'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 39, 'DATA': None}
+DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:40;DATA:ibero a dignissim. Praesent condimentum aliquet finibus. Nam et elit lorem. Praesent sit amet dolor '
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:40;DATA:ibero a dignissim. Praesent condimentum aliquet finibus. Nam et elit lorem. Praesent sit amet dolor '
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 40, 'DATA': None}
+</div></code></pre>
+<p>After <code>SEQ = 41</code> was sent and acknowledged, <code>SEQ = 42</code> was sent. However, this was never acknowledged after multiple timeouts. Note that the log is shortened here for conciseness.</p>
+<pre class="hljs"><code><div>DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:41;DATA:non velit blandit placerat. Aliquam vitae ligula orci. Interdum et malesuada fames ac ante ipsum pri'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3755, 'SEQ': 41, 'DATA': None}
+DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:42;DATA:mis in faucibus. Quisque tincidunt dapibus tellus eu euismod. Ut ac dui sit amet tortor mattis congu'
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:42;DATA:mis in faucibus. Quisque tincidunt dapibus tellus eu euismod. Ut ac dui sit amet tortor mattis congu'
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:42;DATA:mis in faucibus. Quisque tincidunt dapibus tellus eu euismod. Ut ac dui sit amet tortor mattis congu'
+...
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:42;DATA:mis in faucibus. Quisque tincidunt dapibus tellus eu euismod. Ut ac dui sit amet tortor mattis congu'
+INFO:__main__:Receive timeout!
+DEBUG:__main__:client -&gt; ('177.71.168.45', 4650) (return 100): b'Type:2;TID:3755;SEQ:42;DATA:mis in faucibus. Quisque tincidunt dapibus tellus eu euismod. Ut ac dui sit amet tortor mattis congu'
+^CINFO:__main__:MDALP: ('18.139.29.142', 4650) closed.
+Traceback (most recent call last):
+  File &quot;mdalp.py&quot;, line 660, in &lt;module&gt;
+    main(args)
+  File &quot;mdalp.py&quot;, line 609, in main
+    ret = client.send(data, load_balance=False, nth_server=args.server)
+  File &quot;mdalp.py&quot;, line 587, in send
+    ret = self._send_single_server(hosts[nth_server - 1], tid, data)
+  File &quot;mdalp.py&quot;, line 465, in _send_single_server
+    response = server.recv_packet(timeout=self.TIMEOUT)
+  File &quot;mdalp.py&quot;, line 271, in recv_packet
+    events = self._sel.select(timeout)
+  File &quot;/usr/lib/python3.8/selectors.py&quot;, line 468, in select
+    fd_event_list = self._selector.poll(timeout, max_ev)
+KeyboardInterrupt
+</div></code></pre>
+<p>Looking at the packet capture, we observe this series of packets exactly. Packet 224 is the acknowledgement for <code>SEQ = 41</code> then the next packets are packets for <code>SEQ = 42</code> which are never acknowledged.</p>
+<p><img src="screen captures/a1.png" alt=""></p>
+<h3 id="server-b">Server B</h3>
+<p><img src="logs/b.png" alt=""></p>
+<p>This server successfully completed the transaction.</p>
+<pre class="hljs"><code><div>python3 mdalp.py -a 18.139.29.142 -p 4650 -f large_payload -vv -m 2 -s 2
+INFO:__main__:Parsed args: Namespace(addr='18.139.29.142', file=&lt;_io.TextIOWrapper name='large_payload' mode='r' encoding='UTF-8'&gt;, mode=2, port=4650, server=2, verbose=2)
+DEBUG:__main__:client -&gt; ('18.139.29.142', 4650) (return 0): b'Type:0;'
+INFO:__main__:Intent message sent to ('18.139.29.142', 4650).
+DEBUG:__main__:Parsed data: {'Type': 1, 'TID': 3747, 'SEQ': None, 'DATA': [{'ip_address': '177.71.168.45', 'name': '5th Receiver'}, {'ip_address': '54.200.52.112', 'name': '4th Receiver'}, {'ip_address': '18.134.193.153', 'name': '2nd Receiver'}]}
+INFO:__main__:Response: {'Type': 1, 'TID': 3747, 'SEQ': None, 'DATA': [{'ip_address': '177.71.168.45', 'name': '5th Receiver'}, {'ip_address': '54.200.52.112', 'name': '4th Receiver'}, {'ip_address': '18.134.193.153', 'name': '2nd Receiver'}]}
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3747;SEQ:0;DATA:Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam viverra quis risus sed luctus. Aliq'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3747, 'SEQ': 0, 'DATA': None}
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3747;SEQ:1;DATA:uam erat volutpat. Aliquam eget massa non dolor finibus pulvinar id vitae metus. Praesent pellentesq'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3747, 'SEQ': 1, 'DATA': None}
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3747;SEQ:2;DATA:ue nulla at elit consectetur sollicitudin. Fusce velit enim, cursus fringilla ante id, sollicitudin '
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3747, 'SEQ': 2, 'DATA': None}
+...
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3747;SEQ:47;DATA:um nibh, vitae malesuada risus ligula faucibus turpis. Curabitur ultricies ut metus vitae malesuada.'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3747, 'SEQ': 47, 'DATA': None}
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3747;SEQ:48;DATA: Mauris imperdiet mauris ac eros bibendum, ut facilisis enim iaculis. Sed cursus nisi vel lorem aliq'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3747, 'SEQ': 48, 'DATA': None}
+DEBUG:__main__:client -&gt; ('54.200.52.112', 4650) (return 100): b'Type:2;TID:3747;SEQ:49;DATA:uam fermentum. Etiam luctus aliquam tincidunt. Maecenas quis varius massa. Nunc ornare ac dui sit a.'
+DEBUG:__main__:Parsed data: {'Type': 3, 'TID': 3747, 'SEQ': 49, 'DATA': None}
+</div></code></pre>
+<p>Looking at the packet capture, observe that the client is exchanging messages with only one receiving server which is <code>Server B</code>.</p>
+<p><img src="screen captures/b1.png" alt=""></p>
+<p>From the time before the first packet is sent up to the last packet was acknowledged, it took <code>48.36496986100019s</code> to complete the transaction.</p>
+<pre class="hljs"><code><div>INFO:__main__:Send took 48.36496986100019s.
+DEBUG:__main__:return: 5000 | data length: 5000
+INFO:__main__:MDALP: ('18.139.29.142', 4650) closed.
+</div></code></pre>
+<h3 id="server-c">Server C</h3>
+<p><img src="logs/c.png" alt=""></p>
+<p>In this case, it is very similar to <code>Server B</code>. Thus, it would not be discussed any further but all logs and tracefiles are still provided as proof. Note that for this server, it took <code>53.899554123000144s</code>.</p>
+<h2 id="53-comparison">5.3. Comparison</h2>
+<p>Recall the following and take note of the summary:</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Server</th>
+<th style="text-align:right">Server latency (ms)</th>
+<th style="text-align:right">Timeouts</th>
+<th style="text-align:right">Elapsed Time (s)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Load balance</td>
+<td>-</td>
+<td style="text-align:right">-</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">26.246</td>
+</tr>
+<tr>
+<td>Non load balance</td>
+<td>A</td>
+<td style="text-align:right">335.148</td>
+<td style="text-align:right">inf</td>
+<td style="text-align:right">failed</td>
+</tr>
+<tr>
+<td>Non load balance</td>
+<td>B</td>
+<td style="text-align:right">162.844</td>
+<td style="text-align:right">2</td>
+<td style="text-align:right">48.364</td>
+</tr>
+<tr>
+<td>Non load balance</td>
+<td>C</td>
+<td style="text-align:right">156.857</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">53.899</td>
+</tr>
+</tbody>
+</table>
+<p>Observe that sending with load balancing is significantly faster. Although the specific amount by how much faster could not be established as this is a single test case, it is expected to be at most <code>n</code> times quicker where <code>n = number of receiving servers</code>. This is because sending the data to multiple receiving servers asynchronously wastes less time in waiting for an acknowledgement. Of course, there will be a trade-off for pinging the receiving servers first, but this should not be very significant because it is done asynchronously. Thus, it can scale to increasing number of receiving servers.</p>
+
+</body>
+</html>
